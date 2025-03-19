@@ -1,3 +1,6 @@
 [submodule "p1"]
 	path = p1
 	url = https://github.com/Neo-2025/p1.git
+[submodule "archive/p1"]
+	path = archive/p1
+	url = https://github.com/Neo-2025/p1.git
