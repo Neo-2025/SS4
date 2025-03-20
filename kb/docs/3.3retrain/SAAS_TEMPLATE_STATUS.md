@@ -173,6 +173,44 @@ The GitHub OAuth flow was breaking due to incorrect redirect handling. The follo
   - Database schema and status tracking (0.5 day)
   - Testing and documentation (1 day)
 
+## 8. Polygon 2.0 Future Integration (Optional)
+
+- **Strategic Approach:**
+  - Added User Story US-009 as an optional, future-looking infrastructure story
+  - Designed as a modular, pluggable architecture to prevent technical debt
+  - Focused on scaffolding and future-proofing rather than immediate implementation
+  - Targeting Polygon 2.0 GA availability (anticipated 2026)
+
+- **Target Use Cases:**
+  - Smart contracts for royalty distribution (Texas Oil & Gas use case)
+  - NFT creation and management (NIL athlete cards)
+  - In-app token economies with real-world value exchange
+  - Transparent, immutable record-keeping
+
+- **Integration Philosophy:**
+  - Core application functionality must work without blockchain dependency
+  - Blockchain features implemented as optional, value-added capabilities
+  - Dual persistence system (traditional DB + blockchain) with consistency management
+  - Feature flags to enable/disable Web3 functionality
+
+- **Technical Foundation:**
+  - Abstraction layer for blockchain interactions
+  - Smart contract templates for common use cases
+  - Wallet connection with multiple provider support
+  - Security-first approach with strict key management
+
+- **Implementation Considerations:**
+  - SS4-B1 workflow may need extension for blockchain-specific patterns
+  - Development and testing primarily on testnets
+  - Gas optimization critical for user experience
+  - Regulatory compliance varies by jurisdiction
+
+- **Preliminary Timeline:**
+  - Initial scaffolding and abstraction layer (future milestone)
+  - Smart contract template development (future milestone)
+  - Wallet integration and transaction handling (future milestone)
+  - Specific use case implementations (future milestone)
+
 ---
 
 _This document captures the current state and provides context about what has been accomplished in pivoting to a more standardized authentication approach using GitHub OAuth._ 

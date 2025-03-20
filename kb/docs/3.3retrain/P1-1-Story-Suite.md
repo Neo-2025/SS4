@@ -446,6 +446,107 @@ story:
       - Add loading indicator during API calls
 ```
 
+## Advanced Feature Stories
+
+These stories represent more advanced capabilities that extend the core SaaS functionality with emerging technologies. They are optional and considered stretch goals for future implementation.
+
+### US-009: Polygon 2.0 Integration Foundation
+
+```yaml
+story:
+  id: "US-009"
+  title: "Polygon 2.0 Integration Foundation (Optional)"
+  type: "infrastructure"
+  priority: "P3"
+  complexity: "XL"
+  dependencies: ["US-005B", "US-006"]
+  technical_context:
+    architecture: "Modular Web3 Integration"
+    stack: ["Next.js", "Polygon 2.0 SDK", "ethers.js", "TypeScript", "Supabase"]
+    constraints: ["Optional Integration", "Future Compatibility", "Security", "Gas Optimization"]
+  acceptance_criteria:
+    functional:
+      - "As a developer, I can optionally enable Polygon 2.0 features with minimal configuration"
+      - "As a developer, I can connect to Polygon testnet and mainnet environments"
+      - "As an application, I can maintain dual persistence (traditional DB + blockchain) with data consistency"
+      - "As a user, I can connect existing wallets for authentication and transactions"
+      - "As a user, I can opt into blockchain-backed features when available"
+      - "As an admin, I can monitor blockchain interactions and resource usage"
+      - "As a system owner, I can deploy smart contracts using templates for different use cases"
+    technical:
+      - "Implement pluggable architecture for optional Polygon integration"
+      - "Create abstraction layer for blockchain interactions"
+      - "Develop smart contract templates for common use cases (tokens, NFTs, royalties)"
+      - "Implement wallet connection with multiple providers"
+      - "Create dual-persistence system with conflict resolution"
+      - "Set up gas fee estimation and optimization"
+      - "Configure secure key management and transaction signing"
+    testing:
+      - "Test wallet connection and authentication"
+      - "Verify transaction signing and sending"
+      - "Test smart contract deployment and interaction"
+      - "Validate dual-persistence synchronization"
+      - "Benchmark performance with and without blockchain features"
+  implementation_notes:
+    architecture: |
+      The Polygon 2.0 integration follows a modular, pluggable architecture:
+      
+      1. Core system functions without requiring blockchain
+      2. Optional Web3 modules can be enabled/disabled
+      3. Abstraction layer separates business logic from blockchain implementation
+      4. Feature flagging for blockchain-dependent features
+      5. Graceful fallbacks when blockchain features are unavailable
+      
+    use_cases: |
+      Designed to support multiple Web3 use cases:
+      
+      - NFT creation and management (e.g., athlete cards, digital collectibles)
+      - Smart contract-based royalty distribution (e.g., oil & gas royalties)
+      - In-app token economies with real value
+      - Transparent record-keeping with immutable audit trails
+      - Fractional ownership of digital and physical assets
+      
+    implementation_approach: |
+      Phased implementation with focus on future compatibility:
+      
+      1. Core infrastructure and abstraction layer
+      2. Wallet connection and basic transactions
+      3. Smart contract templates for specific verticals
+      4. Admin tools for monitoring and management
+      5. User-facing features built on blockchain capabilities
+      
+    smart_contract_templates: |
+      Provide templates for common use cases:
+      
+      - ERC-20 token contracts for in-app economies
+      - ERC-721/1155 contracts for NFT creation
+      - Royalty distribution contracts with verification
+      - Access control contracts for premium features
+      - Multi-signature contracts for group decisions
+      
+    security_considerations: |
+      - Implement strict key management practices
+      - Use well-audited contract templates
+      - Maintain comprehensive testing for all smart contracts
+      - Implement transaction signing confirmation UI
+      - Support hardware wallet integration for enhanced security
+      - Provide clear documentation on security best practices
+      
+    performance_optimization: |
+      - Implement off-chain state management with blockchain verification
+      - Use batch transactions when appropriate
+      - Cache blockchain data with appropriate invalidation
+      - Monitor gas prices and optimize transaction timing
+      - Implement layer 2 solutions for high-volume operations
+      
+    ui_components: |
+      - Wallet connection modal with provider selection
+      - Transaction confirmation dialogs with fee estimation
+      - Blockchain activity monitoring dashboard
+      - Asset gallery for NFT display and management
+      - Token balance and transaction history views
+```
+
 ## SS4-B1 Implementation Approach
 
 To implement this story suite following the SS4-B1 workflow:
