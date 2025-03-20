@@ -266,6 +266,320 @@ EOF
     log "Next.js app structure created successfully"
 }
 
+# Set up Next.js template structure and configuration
+setup_nextjs_template() {
+    log "Setting up Next.js template structure..."
+    
+    # Create src directory structure
+    mkdir -p "$S4_ROOT/p1/src/app" \
+            "$S4_ROOT/p1/src/lib" \
+            "$S4_ROOT/p1/src/types" \
+            "$S4_ROOT/p1/kb/training/basics/templates"
+    
+    # Create app files
+    log "Creating Next.js app files..."
+    cat > "$S4_ROOT/p1/src/app/layout.tsx" << 'EOF'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'S4 SaaS Template',
+  description: 'SmartStack v4 SaaS Template',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
+  )
+}
+EOF
+
+    cat > "$S4_ROOT/p1/src/app/page.tsx" << 'EOF'
+export default function Home() {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+        <h1 className="text-4xl font-bold mb-8">Welcome to S4 SaaS Template</h1>
+        <p className="text-xl mb-4">Your modern SaaS solution starts here.</p>
+      </div>
+    </main>
+  )
+}
+EOF
+
+    cat > "$S4_ROOT/p1/src/app/globals.css" << 'EOF'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  )
+  rgb(var(--background-start-rgb));
+}
+EOF
+
+    # Create utility files
+    log "Creating utility files..."
+    cat > "$S4_ROOT/p1/src/lib/validation.ts" << 'EOF'
+import { NextApiRequest } from 'next';
+
+export interface ValidationResult {
+  isValid: boolean;
+  errors?: string[];
+}
+
+export const validateRequest = (req: NextApiRequest, requiredFields: string[] = []): ValidationResult => {
+  const errors: string[] = [];
+
+  // Validate HTTP method
+  if (!req.method) {
+    errors.push('HTTP method is required');
+  }
+
+  // Validate required fields in body
+  if (requiredFields.length > 0 && req.body) {
+    for (const field of requiredFields) {
+      if (!req.body[field]) {
+        errors.push(`${field} is required`);
+      }
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors: errors.length > 0 ? errors : undefined
+  };
+};
+EOF
+
+    cat > "$S4_ROOT/p1/src/lib/error-handling.ts" << 'EOF'
+import { NextApiResponse } from 'next';
+
+export interface ApiError {
+  message: string;
+  code?: string;
+  status?: number;
+}
+
+export const handleError = (res: NextApiResponse, error: ApiError | Error) => {
+  console.error('API Error:', error);
+
+  const status = (error as ApiError).status || 500;
+  const message = error.message || 'Internal server error';
+  const code = (error as ApiError).code || 'INTERNAL_ERROR';
+
+  return res.status(status).json({
+    error: {
+      message,
+      code,
+    },
+  });
+};
+EOF
+
+    # Create type definitions
+    log "Creating type definitions..."
+    cat > "$S4_ROOT/p1/src/types/index.ts" << 'EOF'
+import React from 'react';
+
+// Common props interface for components
+export interface ComponentProps {
+  className?: string;
+  id?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+}
+
+// Add other common types here
+export interface ApiResponse<T = any> {
+  data?: T;
+  error?: {
+    message: string;
+    code: string;
+  };
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string;
+  role: 'user' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+}
+EOF
+
+    # Create template files
+    log "Creating template files..."
+    cat > "$S4_ROOT/p1/kb/training/basics/templates/api-template.ts" << 'EOF'
+import { NextApiRequest, NextApiResponse } from 'next';
+import { validateRequest } from '@/lib/validation';
+import { handleError, ApiError } from '@/lib/error-handling';
+
+// Handler function types
+type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
+
+// Handler implementations
+const handleGet: ApiHandler = async (req, res) => {
+  // Implement GET logic here
+  res.status(200).json({ message: 'GET request successful' });
+};
+
+const handlePost: ApiHandler = async (req, res) => {
+  // Implement POST logic here
+  res.status(201).json({ message: 'POST request successful' });
+};
+
+const handlePut: ApiHandler = async (req, res) => {
+  // Implement PUT logic here
+  res.status(200).json({ message: 'PUT request successful' });
+};
+
+const handleDelete: ApiHandler = async (req, res) => {
+  // Implement DELETE logic here
+  res.status(200).json({ message: 'DELETE request successful' });
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    // Validate request
+    const validation = validateRequest(req);
+    if (!validation.isValid) {
+      return res.status(400).json({ errors: validation.errors });
+    }
+
+    // Handle different HTTP methods
+    switch (req.method) {
+      case 'GET':
+        return handleGet(req, res);
+      case 'POST':
+        return handlePost(req, res);
+      case 'PUT':
+        return handlePut(req, res);
+      case 'DELETE':
+        return handleDelete(req, res);
+      default:
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+  } catch (error) {
+    return handleError(res, error as Error | ApiError);
+  }
+}
+EOF
+
+    cat > "$S4_ROOT/p1/kb/training/basics/templates/component-template.tsx" << 'EOF'
+import React from 'react';
+import { ComponentProps } from '@/types';
+
+interface Props extends ComponentProps {
+  // Add component-specific props here
+  title?: string;
+  description?: string;
+  onClick?: () => void;
+}
+
+export const ComponentName: React.FC<Props> = ({
+  className,
+  id,
+  style,
+  children,
+  title = 'Default Title',
+  description,
+  onClick,
+}) => {
+  // Add hooks here
+  const handleClick = React.useCallback(() => {
+    if (onClick) {
+      onClick();
+    }
+  }, [onClick]);
+
+  return (
+    <div
+      id={id}
+      className={className}
+      style={style}
+      onClick={handleClick}
+    >
+      {title && <h2>{title}</h2>}
+      {description && <p>{description}</p>}
+      {children}
+    </div>
+  );
+};
+EOF
+
+    # Configure TypeScript
+    log "Configuring TypeScript..."
+    cat > "$S4_ROOT/p1/tsconfig.json" << 'EOF'
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+EOF
+
+    # Verify the build
+    log "Verifying template build..."
+    cd "$S4_ROOT/p1" || handle_error "Failed to change to p1 directory"
+    npm run build || handle_error "Template build failed"
+    
+    log "Next.js template setup complete"
+}
+
 # Configure Vercel and Supabase integration
 configure_vercel_supabase() {
     log "Configuring Vercel and Supabase integration..."
@@ -797,6 +1111,245 @@ EOF
     log "4. Enable Fluid Compute in Vercel Project Settings > Functions for S4 compliance"
 }
 
+# Set up Git repository structure
+setup_git_repository() {
+    log "Setting up Git repository structure..."
+    
+    # Initialize Git repository
+    cd "$S4_ROOT" || handle_error "Failed to change to S4 directory"
+    git init
+    
+    # Add submodules
+    git submodule add https://github.com/Neo-2025/p1.git p1
+    git submodule add https://github.com/Neo-2025/p1.git archive/p1
+    
+    # Create README
+    cat > "$S4_ROOT/README.md" << EOF
+# SmartStack v4 (SS4)
+
+## Overview
+SmartStack v4 (SS4) is a development framework designed for efficient MVP development using AI-assisted development tools, particularly Cursor AI.
+
+## Structure
+- \`/p1\` - Main project directory
+- \`/kb\` - Knowledge base and documentation
+- \`/scripts\` - Development and automation scripts
+- \`/archive\` - Daily context archives
+
+## Key Features
+- AI-assisted development workflow
+- Daily context preservation
+- Automated token rotation
+- GitOps-based workflow
+- Integrated documentation
+
+## Getting Started
+1. Clone this repository
+2. Follow setup guide in \`/p1/SETUP.md\`
+3. Review knowledge base in \`/kb/docs/\`
+
+## Documentation
+- [Context Archive Guide](/kb/docs/context-archive-guide.md)
+- [Token Rotation Guide](/kb/docs/token-rotation-guide.md)
+- [Project Setup Guide](/p1/SETUP.md)
+
+## License
+Proprietary - All rights reserved 
+EOF
+    
+    # Initial commit and push
+    git add .
+    git commit -m "feat: initial SS4 framework setup with submodules"
+    git branch -M main
+    
+    log "Repository structure setup complete"
+}
+
+# Configure Vercel project and prevent duplicate creation
+configure_vercel_project() {
+    log "Configuring Vercel project..."
+    
+    # IMPORTANT: Prevention of Duplicate Project Creation
+    # Historical Context: Previously, automatic project creation led to duplicate projects
+    # (e.g., p1-nextjs-saas was created erroneously alongside p1)
+    # This function implements safeguards to prevent such issues
+    
+    # Verify existing project
+    if ! vercel inspect --token="$VERCEL_TOKEN" 2>/dev/null; then
+        log "Project not found. Linking to existing project..."
+        # Link to existing project instead of creating new
+        vercel link --token="$VERCEL_TOKEN" --yes || handle_error "Failed to link Vercel project"
+    fi
+    
+    # Pull environment information without auto-creation
+    vercel pull --token="$VERCEL_TOKEN" --environment=preview || handle_error "Failed to pull Vercel environment"
+    
+    # Verify project configuration
+    log "Verifying Vercel project configuration..."
+    if [ ! -f ".vercel/project.json" ]; then
+        handle_error "Project configuration not found. Please ensure project is properly linked."
+    fi
+    
+    # Document project ID for reference
+    PROJECT_ID=$(jq -r '.projectId' .vercel/project.json)
+    log "Linked to Vercel project ID: $PROJECT_ID"
+    
+    # Configure essential settings
+    log "Configuring Vercel project settings..."
+    log "1. Enable Fluid Compute in Project Settings > Functions"
+    log "2. Set up environment variables in Project Settings > Environment Variables"
+    log "3. Configure deployment protection if needed"
+    
+    # Document in project README
+    cat >> "$S4_ROOT/p1/README.md" << EOF
+
+## Vercel Deployment Protection
+To prevent accidental project creation:
+1. Always use \`vercel link\` before deployment
+2. Keep \`.vercel/project.json\` in version control
+3. Verify project ID matches environment variables
+4. Use explicit project naming in commands
+5. Never use auto-creation flags without verification
+EOF
+}
+
+# Configure Git repository and prevent common issues
+configure_git_and_vercel() {
+    log "Setting up Git and Vercel configuration..."
+    
+    # Create comprehensive .gitignore
+    log "Creating .gitignore with proper exclusions..."
+    cat > "$S4_ROOT/p1/.gitignore" << 'EOF'
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+*.pem
+.env*
+!.env.example
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+
+# Vercel
+.vercel/*
+!.vercel/project.json
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.vscode/
+.idea/
+
+# Supabase
+**/supabase/.temp
+**/supabase/.env
+
+# Logs
+logs
+*.log
+
+# Cache
+.cache/
+.vercel
+EOF
+
+    # Create base package.json with fixed versions
+    log "Creating package.json with consistent dependency versions..."
+    cat > "$S4_ROOT/p1/package.json" << 'EOF'
+{
+  "name": "p1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio",
+    "stripe:sync": "node scripts/stripe-sync.js"
+  },
+  "dependencies": {
+    "next": "14.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@supabase/supabase-js": "2.39.3",
+    "@supabase/auth-helpers-nextjs": "^0.9.0",
+    "drizzle-orm": "^0.29.3",
+    "postgres": "^3.4.3",
+    "@stripe/stripe-js": "^2.4.0",
+    "stripe": "^14.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "5.3.3",
+    "autoprefixer": "^10.4.17",
+    "tailwindcss": "^3.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@tailwindcss/forms": "^0.5.7",
+    "postcss": "^8.4.35",
+    "drizzle-kit": "^0.30.5"
+  }
+}
+EOF
+
+    # IMPORTANT: Vercel Project Setup
+    # Historical Context: Previously, automatic project creation led to duplicate projects
+    # (e.g., p1-nextjs-saas was created erroneously alongside p1)
+    log "Setting up Vercel project..."
+    
+    # Verify or create Vercel link
+    if ! vercel inspect --token="$VERCEL_TOKEN" 2>/dev/null; then
+        log "Project not found. Linking to existing project..."
+        vercel link --token="$VERCEL_TOKEN" --yes || handle_error "Failed to link Vercel project"
+    fi
+    
+    # Ensure .vercel/project.json is tracked
+    if [ -f "$S4_ROOT/p1/.vercel/project.json" ]; then
+        log "Adding Vercel project configuration to version control..."
+        git -C "$S4_ROOT/p1" add -f .vercel/project.json
+        git -C "$S4_ROOT/p1" commit -m "chore: add vercel project configuration"
+    else
+        handle_error "Vercel project configuration not found. Please ensure project is properly linked."
+    fi
+    
+    # Install dependencies
+    log "Installing project dependencies..."
+    cd "$S4_ROOT/p1" || handle_error "Failed to change to p1 directory"
+    npm install || handle_error "Failed to install dependencies"
+    
+    # Initial Git setup
+    log "Performing initial Git commit..."
+    git -C "$S4_ROOT/p1" add .
+    git -C "$S4_ROOT/p1" commit -m "chore: initial project setup"
+    
+    log "Git and Vercel configuration complete"
+}
+
 # Usage information
 usage() {
     echo "Usage: $0 [command]"
@@ -826,7 +1379,11 @@ main() {
     configure_git
     create_project_structure
     setup_nextjs_app
+    setup_nextjs_template
+    setup_git_repository
+    configure_vercel_project
     setup_vercel_and_github
+    configure_git_and_vercel
     
     log "S4 bootstrap process completed successfully!"
 }

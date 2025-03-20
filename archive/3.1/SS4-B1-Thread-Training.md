@@ -1,0 +1,356 @@
+# SmartStack v4 Branch First (SS4-B1) Thread Training Guide
+
+## Overview
+
+This document trains CursorAI agent threads to assist with the SmartStack v4 Branch First (SS4-B1) development workflow. Each thread will focus on implementing a specific user story from the story suite while following consistent SS4-B1 practices.
+
+## Project Context
+
+SmartStack v4 is a framework for efficient SaaS MVP development using:
+- Next.js 14+ (App Router)
+- TypeScript
+- Tailwind CSS with shadcn/ui
+- Supabase for auth and database
+- Vercel for deployment with preview environments
+- SS4-B1 workflow for reliable feature development
+
+## Story Suite Navigation
+
+The story suite in `kb/docs/P1-1-Story-Suite.md` contains all implementation tasks. When working on a specific story, update this section with the current story details:
+
+```yaml
+current_story:
+  id: "US-XXX" # Current story ID (e.g., US-001)
+  title: "Story Title" # Current story title
+  type: "feature|fix|infrastructure" # Story type
+  complexity: "XS|S|M|L|XL" # Story complexity
+  dependencies: ["US-XXX", "US-XXX"] # Required prerequisite stories
+```
+
+## SS4-B1 Workflow
+
+The SS4-B1 workflow is a branch-first approach that ensures consistent, high-quality code:
+
+1. **Branch Creation**: Always start by creating a dedicated branch
+   ```bash
+   git checkout -b [type]/[story-id]-[short-description]
+   # Example: git checkout -b feat/us-001-github-auth
+   ```
+
+2. **Implementation**: Write focused code that addresses only the current story
+   - Follow existing code patterns and conventions
+   - Implement minimal viable code
+   - Ensure proper error handling
+   - Include appropriate tests
+
+3. **Commit Strategy**: Use conventional commit messages
+   ```bash
+   git commit -m "[type]: [clear description] [SS4-B1]"
+   # Example: git commit -m "feat: implement GitHub OAuth login form [SS4-B1]"
+   ```
+
+4. **Deploy Preview**: Push branch and create preview deployment
+   ```bash
+   git push -u origin [branch-name]
+   gh pr create --title "[type]: [description]" --body "Implements [story-id]"
+   vercel
+   ```
+
+5. **Testing**: Verify functionality in preview environment
+   ```bash
+   vercel ls
+   # Test using the preview URL
+   ```
+
+6. **Documentation**: Update documentation with implementation details
+   - Update `SAAS_TEMPLATE_STATUS.md`
+   - Document successful patterns in `kb/patterns/`
+   - Create usage examples if appropriate
+
+7. **Merge**: Complete the workflow by merging to main after approval
+   ```bash
+   git checkout main
+   git pull
+   git merge [branch-name]
+   git push
+   ```
+
+## Key Commands and Tools
+
+### Git Commands
+```bash
+# Create feature branch
+git checkout -b feat/us-xxx-feature-name
+
+# Create fix branch
+git checkout -b fix/us-xxx-bug-name
+
+# Check status
+git status
+
+# Add changes
+git add .
+
+# Commit changes
+git commit -m "type: description [SS4-B1]"
+
+# Push changes
+git push -u origin branch-name
+```
+
+### GitHub Commands
+```bash
+# Create PR
+gh pr create --title "Type: Description" --body "Detailed explanation"
+
+# Check PR status
+gh pr list
+
+# Check PR details
+gh pr view
+```
+
+### Vercel Commands
+```bash
+# Deploy preview
+vercel
+
+# List deployments
+vercel ls
+
+# Pull environment variables
+vercel env pull .env.local
+```
+
+### Development Commands
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build project
+npm run build
+
+# Run tests
+npm test
+```
+
+## Documentation Requirements
+
+Each story implementation must include documentation updates:
+
+1. **SAAS_TEMPLATE_STATUS.md**
+   - Implementation approach
+   - Technical solutions applied
+   - Known limitations
+   - Future improvements
+
+2. **Pattern Documentation**
+   Create files in `kb/patterns/` for reusable solutions:
+   ```markdown
+   # Pattern: [Pattern Name]
+
+   ## Problem
+   [Problem statement]
+
+   ## Solution
+   [Solution details]
+
+   ## Implementation
+   ```[language]
+   // Code example
+   ```
+
+   ## Usage
+   [Usage examples]
+
+   ## Benefits
+   [Benefits of this pattern]
+   ```
+
+## Assistance Patterns
+
+When assisting with development, follow these patterns:
+
+1. **Initial Assessment**
+   - Review the current story requirements
+   - Check dependencies and prerequisites
+   - Understand existing codebase structure
+
+2. **Branch Strategy**
+   - Always start with branch creation
+   - Use proper naming convention: `[type]/us-xxx-[description]`
+
+3. **Implementation Guidance**
+   - Provide clear code suggestions
+   - Follow project conventions
+   - Implement focused changes addressing only the current story
+
+4. **Testing Approach**
+   - Provide clear testing instructions
+   - Verify functionality in preview environment
+   - Address any issues found during testing
+
+5. **Documentation Updates**
+   - Update status documentation
+   - Document successful patterns
+   - Provide usage examples
+
+6. **Workflow Completion**
+   - Summarize changes made
+   - Link to preview deployment
+   - Recommend next steps
+
+## Response Format
+
+Structure your assistance following this format:
+
+```
+## Story Analysis
+[Brief analysis of the story requirements]
+
+## Branch Strategy
+[Branch creation recommendation]
+
+## Implementation Plan
+[Steps for implementing the solution]
+
+## Code Implementation
+[Code suggestions and explanations]
+
+## Testing Instructions
+[How to test the implementation]
+
+## Documentation Updates
+[Required documentation changes]
+
+## SS4-B1 Status
+[Current workflow status and next steps]
+```
+
+When a workflow is complete, use:
+
+```
+## SS4-B1 Workflow Complete ✅
+
+- Branch: [branch-name]
+- PR: [PR link]
+- Preview: [preview URL]
+- Documentation: [files updated]
+- Pattern: [pattern documented, if any]
+
+Next story recommendation: [suggestion for next story]
+```
+
+## Special Commands
+
+Use these shorthand commands in your interactions:
+
+- `[SS4-B1] status` - Check current workflow status
+- `[SS4-B1] next-step` - Get next step recommendation
+- `[SS4-B1] preview` - Generate preview deployment
+- `[SS4-B1] document` - Update documentation
+- `[SS4-B1] test` - Verify implementation
+- `[SS4-B1] complete` - Complete current workflow
+
+## Best Practices from Bootstrap
+
+From the bootstrap script, incorporate these best practices:
+
+1. **Environment Management**
+   - Keep `.env.local` for local development only
+   - Use Vercel environment variables for deployment
+   - Pull environment variables with `vercel env pull`
+
+2. **Path Management**
+   - Always work from the project root: `/home/neo/SS4/p1`
+   - Use relative paths for project files
+
+3. **Error Prevention**
+   - Verify Vercel project configuration before deployment
+   - Avoid duplicate project creation
+   - Maintain consistent dependency versions
+
+4. **Performance Optimization**
+   - Enable Fluid Compute in Vercel for optimal performance
+   - Optimize resource allocation for development
+
+## Story Suite Implementation Guide
+
+The story suite in `kb/docs/P1-1-Story-Suite.md` contains these key stories:
+
+1. **US-000**: Project Setup with Clean Next.js Template
+2. **US-001**: GitHub OAuth Authentication with shadcn/ui
+3. **US-002**: Protected Landing Page
+4. **US-003**: User Profile Management
+5. **US-004**: Basic Dashboard Framework
+6. **US-005**: Subscription Plans Display
+7. **US-006**: Basic API Infrastructure
+8. **US-007**: CLI-like UI for March Madness Bracket Challenge
+9. **US-008**: Perplexity API Integration for Pregame Hype Summaries
+
+Each story should be implemented in sequence, following dependencies.
+
+## Implementation Strategy for Current Stories
+
+### US-000: Project Setup with Clean Next.js Template
+- Focus on clean scaffolding with Next.js 14+
+- Configure TypeScript, Tailwind, and shadcn/ui
+- Link to existing Supabase project
+
+### US-001: GitHub OAuth Authentication
+- Implement hybrid auth pattern with client fallbacks
+- Use shadcn/ui Button component for GitHub login
+- Ensure SSR-safe auth checks
+
+### US-002: Protected Landing Page
+- Create static shell with progressive enhancement
+- Implement client-side data fetching with loading states
+- Add sign-out functionality and basic navigation
+
+### US-007: CLI-like UI for March Madness
+- Implement command parser with role-based auth
+- Create token management system
+- Develop real-time leaderboard
+
+### US-008: Perplexity API Integration
+- Implement secure API client with caching
+- Create effective prompt templates
+- Format AI responses for readability
+
+## Common Issues and Solutions
+
+1. **Vercel Deployment Issues**
+   - Check for syntax errors in JSON files
+   - Verify environment variables in Vercel dashboard
+   - Test build locally before deployment
+
+2. **Authentication Flows**
+   - Use static page components for auth pages
+   - Handle SSR errors with client-side fallbacks
+   - Test auth redirects in preview environment
+
+3. **Data Fetching**
+   - Prefer client-side data fetching with SWR or React Query
+   - Provide fallbacks for loading states
+   - Handle errors gracefully
+
+4. **TypeScript Errors**
+   - Use proper typings for Supabase and Next.js
+   - Create type definitions for API responses
+   - Add proper interface definitions for components
+
+## Conclusion
+
+This training guide establishes the foundation for using the SS4-B1 workflow to implement the story suite. Each thread will focus on a specific story, following this workflow consistently to build a high-quality SaaS application.
+
+Remember:
+1. Always start with a branch
+2. Implement minimal viable changes
+3. Document successful patterns
+4. Test in preview environments
+5. Update documentation
+
+As stories are completed, update this document with the current focus story to maintain context across threads. 
