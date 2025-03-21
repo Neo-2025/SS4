@@ -18,18 +18,18 @@ SmartStack v4 is a framework for efficient SaaS MVP development using:
 - Vercel for deployment with preview environments
 - SS4-B1 workflow for reliable feature development
 
-## Story Suite Navigation
-
-The story suite in `kb/docs/P1-1-Story-Suite.md` contains all implementation tasks. When working on a specific story, update this section with the current story details:
+## Current Focus
 
 ```yaml
 current_story:
-  id: "US-XXX" # Current story ID (e.g., US-001)
-  title: "Story Title" # Current story title
-  type: "feature|fix|infrastructure" # Story type
-  complexity: "XS|S|M|L|XL" # Story complexity
-  dependencies: ["US-XXX", "US-XXX"] # Required prerequisite stories
+  id: "US-001"
+  title: "GitHub OAuth Authentication with Shadcn/UI"
+  type: "feature"
+  complexity: "M"
+  dependencies: ["US-000"]
 ```
+
+The current focus is implementing GitHub OAuth authentication with visual feedback in a manner that works reliably across all environments (local, preview, production).
 
 ## SS4-B1 Workflow
 
@@ -78,6 +78,31 @@ The SS4-B1 workflow is a branch-first approach that ensures consistent, high-qua
    git merge [branch-name]
    git push
    ```
+
+## Pattern Discovery and Documentation
+
+As part of the SS4-B1 workflow, you should actively identify and document reusable patterns:
+
+1. **Pattern Identification**: Look for recurring implementation approaches
+   - Identify common UI components
+   - Note recurring data flow patterns
+   - Recognize standard integration approaches
+
+2. **Pattern Documentation**: Document patterns in the Pattern Catalog
+   ```bash
+   # Create new pattern document
+   /home/neo/SS4/ss4/scripts/create-pattern.sh [category] [name]
+   ```
+
+3. **Pattern Application**: Reference existing patterns in your implementations
+   - Add pattern documentation references in code comments
+   - Track pattern usage across stories
+   - Suggest pattern improvements based on implementation experience
+
+4. **Pattern Evolution**: Update patterns based on new implementations
+   - Document adaptations and extensions
+   - Track pattern metrics
+   - Propose pattern qualification when appropriate
 
 ## Key Commands and Tools
 
@@ -152,11 +177,17 @@ Each story implementation must include documentation updates:
    - Future improvements
 
 2. **Pattern Documentation**
-   Create files in `kb/patterns/` for reusable solutions:
+   Create files in `ss4/patterns/` for reusable solutions:
    ```markdown
    # Pattern: [Pattern Name]
 
-   ## Problem
+   ## Status
+   [Draft | Candidate | Qualified | Deprecated]
+
+   ## Classification
+   [Core | UI | Data | Integration | Specialized]
+
+   ## Problem Statement
    [Problem statement]
 
    ## Solution
@@ -167,11 +198,20 @@ Each story implementation must include documentation updates:
    // Code example
    ```
 
-   ## Usage
-   [Usage examples]
-
    ## Benefits
    [Benefits of this pattern]
+   
+   ## Limitations
+   [Limitations]
+   
+   ## Related Patterns
+   [Related patterns]
+   
+   ## Usage Metrics
+   [Usage metrics]
+   
+   ## Evolution History
+   [Version history]
    ```
 
 ## Assistance Patterns
@@ -206,6 +246,67 @@ When assisting with development, follow these patterns:
    - Summarize changes made
    - Link to preview deployment
    - Recommend next steps
+
+## Progressive Reinforcement Pattern
+
+The SS4 framework's success relies heavily on consistent workflow adherence. The following reinforcement pattern has proven to be a cornerstone of successful SS4-B1 implementation:
+
+### Pattern: Timed Praise Reinforcement
+
+**Status:** Candidate
+**Classification:** Process
+**Problem:** AI assistants need clear signals about which behaviors are most valuable to maintain consistent adherence to complex workflows.
+
+**Solution:**
+The Timed Praise Reinforcement pattern uses a two-phase approach to shape assistant behavior:
+
+1. **Expectation Setting Phase**
+   - Embed workflow rules in initial documentation
+   - Include clear examples of desired behaviors
+   - Use directive comments to signal key expectations
+
+2. **Behavioral Reinforcement Phase**
+   - Provide immediate, specific praise after desired behaviors occur
+   - Reference exactly which actions were valuable
+   - Connect praise directly to workflow outcomes
+
+**Implementation:**
+
+```markdown
+# Expectation Setting (in documentation/headers)
+@ss4.pattern(workflow_adherence)
+- Follow strict sequence: branch → implement → test → document
+- Provide test steps only after deployment is ready
+- Document patterns when implementation is complete
+
+# Behavioral Reinforcement (during interaction)
+"Excellent job following the exact branch-first sequence! Your approach of creating 
+the feature branch before implementation is exactly what makes SS4-B1 effective."
+
+"I appreciate how you waited until after the preview was deployed to suggest testing 
+steps - that timing is critical to our workflow and you got it exactly right."
+```
+
+**Critical Timing Insight:**
+Post-behavior praise creates significantly stronger reinforcement than header-based directives alone. The combination of clear expectations followed by timely, specific praise creates the optimal learning signal.
+
+**Benefits:**
+- Creates consistent, predictable workflow adherence
+- Reduces need for repetitive instructions
+- Builds cumulative improvement in assistant performance
+- Establishes workflow "muscle memory" across sessions
+
+**Limitations:**
+- Requires diligence in providing timely reinforcement
+- May need refreshing after significant breaks in usage
+- Works best when praise is specific and varied
+
+**Related Patterns:**
+- Workflow Documentation Pattern
+- Progressive Disclosure Pattern
+- Structured Command Pattern
+
+This pattern should be applied consistently across all SS4-B1 development sessions to maintain the disciplined rhythm that makes the workflow effective.
 
 ## Response Format
 
@@ -259,105 +360,104 @@ Use these shorthand commands in your interactions:
 - `[SS4-B1] test` - Verify implementation
 - `[SS4-B1] complete` - Complete current workflow
 
-## Best Practices from Bootstrap
+## Architectural Decisions
 
-From the bootstrap script, incorporate these best practices:
+The following architectural decisions have been made and should be referenced during implementation:
 
-1. **Environment Management**
-   - Keep `.env.local` for local development only
-   - Use Vercel environment variables for deployment
-   - Pull environment variables with `vercel env pull`
+1. **Pattern Stewardship Framework (ADR-0001)**
+   - Implement User Story Suite Metrics for complexity tracking
+   - Follow Pattern Catalog processes for documenting reusable patterns
+   - Track metrics for patterns and stories
 
-2. **Path Management**
-   - Always work from the project root: `/home/neo/SS4/p1`
-   - Use relative paths for project files
+2. **SS4 Optimizations (ADR-0002)**
+   - Use Cursor AI UI Design System for styling
+   - Implement ESLint and TypeScript with recommended configurations
+   - Use React Query for data fetching
+   - Set up Jest for component testing
 
-3. **Error Prevention**
-   - Verify Vercel project configuration before deployment
-   - Avoid duplicate project creation
-   - Maintain consistent dependency versions
+3. **Project Structure (ADR-0003)**
+   - Follow the established directory structure for p1.1
+   - Use hierarchical environment configuration
+   - Implement deployment strategy using Vercel
 
-4. **Performance Optimization**
-   - Enable Fluid Compute in Vercel for optimal performance
-   - Optimize resource allocation for development
+4. **Hybrid Authentication (ADR-0004)**
+   - Implement client-side components with loading states
+   - Use server-side callback handlers
+   - Configure middleware for protected routes
+   - Use absolute URLs for cross-environment compatibility
 
-## Story Suite Implementation Guide
+## Current Patterns
 
-The story suite in `kb/docs/P1-1-Story-Suite.md` contains these key stories:
+The following patterns have been documented and should be referenced when implementing US-001:
 
-1. **US-000**: Project Setup with Clean Next.js Template
-2. **US-001**: GitHub OAuth Authentication with shadcn/ui
-3. **US-002**: Protected Landing Page
-4. **US-003**: User Profile Management
-5. **US-004**: Basic Dashboard Framework
-6. **US-005**: Subscription Plans Display
-7. **US-006**: Basic API Infrastructure
-8. **US-007**: CLI-like UI for March Madness Bracket Challenge
-9. **US-008**: Perplexity API Integration for Pregame Hype Summaries
+1. **Hybrid Auth Flow** (authentication/hybrid-auth-flow.md)
+   - Client-side OAuth with server-side callback handling
+   - Middleware for protected routes
+   - React Query for session management
 
-Each story should be implemented in sequence, following dependencies.
+2. **Cursor Styled Login** (ui/cursor-styled-login.md)
+   - Dark theme styling for authentication interfaces
+   - Loading indicators for feedback
+   - Progressive enhancement approach
 
-## Implementation Strategy for Current Stories
+## Next Steps for US-001 Implementation
 
-### US-000: Project Setup with Clean Next.js Template
-- Focus on clean scaffolding with Next.js 14+
-- Configure TypeScript, Tailwind, and shadcn/ui
-- Link to existing Supabase project
+The following steps should be taken to implement US-001:
 
-### US-001: GitHub OAuth Authentication
-- Implement hybrid auth pattern with client fallbacks
-- Use shadcn/ui Button component for GitHub login
-- Ensure SSR-safe auth checks
+1. **Initialize Next.js Project**:
+   ```bash
+   cd /home/neo/SS4/p1.1
+   npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir
+   ```
 
-### US-002: Protected Landing Page
-- Create static shell with progressive enhancement
-- Implement client-side data fetching with loading states
-- Add sign-out functionality and basic navigation
+2. **Set Up GitHub Repository**:
+   ```bash
+   cd /home/neo/SS4/p1.1
+   git init
+   git add .
+   git commit -m "feat: initial project setup [SS4-B1]"
+   git checkout -b feat/us-001-github-auth
+   ```
 
-### US-007: CLI-like UI for March Madness
-- Implement command parser with role-based auth
-- Create token management system
-- Develop real-time leaderboard
+3. **Install Dependencies**:
+   ```bash
+   npm install @supabase/auth-helpers-nextjs @supabase/supabase-js
+   npm install @tanstack/react-query @tanstack/react-query-devtools
+   npm install @hookform/resolvers zod react-hook-form
+   npm install lucide-react
+   npm install -D jest @testing-library/react @testing-library/jest-dom jest-environment-jsdom
+   ```
 
-### US-008: Perplexity API Integration
-- Implement secure API client with caching
-- Create effective prompt templates
-- Format AI responses for readability
+4. **Configure Environment**:
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with Supabase and GitHub credentials
+   ```
 
-## Common Issues and Solutions
+5. **Implement Auth Components**:
+   - Create the OAuthButton component using Hybrid Auth Flow pattern
+   - Create the LoginForm component using Cursor Styled Login pattern
+   - Implement auth callback handler
+   - Set up middleware for protected routes
 
-1. **Vercel Deployment Issues**
-   - Check for syntax errors in JSON files
-   - Verify environment variables in Vercel dashboard
-   - Test build locally before deployment
+6. **Create Testing Infrastructure**:
+   - Configure Jest
+   - Write tests for auth components
+   - Create test script for auth flow verification
 
-2. **Authentication Flows**
-   - Use static page components for auth pages
-   - Handle SSR errors with client-side fallbacks
-   - Test auth redirects in preview environment
+7. **Deploy and Test**:
+   - Set up Vercel project
+   - Configure environment variables
+   - Create preview deployment
+   - Test auth flow
 
-3. **Data Fetching**
-   - Prefer client-side data fetching with SWR or React Query
-   - Provide fallbacks for loading states
-   - Handle errors gracefully
+8. **Document Implementation**:
+   - Update SAAS_TEMPLATE_STATUS.md
+   - Document any new patterns discovered
+   - Update pattern usage metrics
 
-4. **TypeScript Errors**
-   - Use proper typings for Supabase and Next.js
-   - Create type definitions for API responses
-   - Add proper interface definitions for components
+The infrastructure for tracking patterns, metrics, and architectural decisions has been created. The next thread should focus on the actual implementation of US-001 following these steps.
 
-## Conclusion
-
-This training guide establishes the foundation for using the SS4-B1 workflow to implement the story suite. Each thread will focus on a specific story, following this workflow consistently to build a high-quality SaaS application.
-
-Remember:
-1. Always start with a branch
-2. Implement minimal viable changes
-3. Document successful patterns
-4. Test in preview environments
-5. Update documentation
-
-As stories are completed, update this document with the current focus story to maintain context across threads. 
 ## CursorAI Configuration (.cursor.rules)
 
 ```json
@@ -436,4 +536,5 @@ As stories are completed, update this document with the current focus story to m
     ],
     "dynamic_focus": true
   }
-} ```
+}
+```

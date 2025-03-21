@@ -446,10 +446,6 @@ story:
       - Add loading indicator during API calls
 ```
 
-## Advanced Feature Stories
-
-These stories represent more advanced capabilities that extend the core SaaS functionality with emerging technologies. They are optional and considered stretch goals for future implementation.
-
 ### US-009: Polygon 2.0 Integration Foundation
 
 ```yaml

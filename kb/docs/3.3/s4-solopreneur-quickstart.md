@@ -213,123 +213,147 @@ prompt: |
 - Security audits
 - User feedback 
 
-## Addendum: Prompt Engineering Headers
+### Context Window User Guide
 
-### @ Headers for Context and Response Control
+The Context Window in Cursor provides visual tools for managing which documents influence your AI assistant's responses, complementing the @ header system.
 
-The S4 framework utilizes specialized @ headers at the beginning of prompts to control AI assistant behavior, response characteristics, and context management.
+#### Visual Indicators
 
-#### Model Selection Headers
-- `@claude-3.5-sonnet` - Instructs the system to use Claude 3.5 Sonnet model
-- `@claude-3.7-sonnet` - Instructs the system to use Claude 3.7 Sonnet model
-- `@gpt-4o` - Instructs the system to use GPT-4o model
+- **Green Dot**: Shows an active document currently in your context
+- **Green Number**: Indicates approximate token count from this document in context
+- **Red X**: Appears when hovering over documents, allows removal from context
+- **Red Number**: Shows how many tokens would be freed by removing the document
 
-#### Response Style Headers
-- `@fast` - Prioritizes speed over depth in responses
-  - Produces quicker but possibly less nuanced responses
-  - Best for simple queries where speed matters more than thoroughness
-  - May result in shorter responses with less detailed reasoning
-- `@slow` - Instructs AI to take more time for thorough, detailed responses
-  - Results in more comprehensive analysis and explanations
-  - Best for complex technical or conceptual questions
-- `@draft` - Requests a "first draft" quality response
-  - Prioritizes getting ideas down quickly over polish
-  - Useful for brainstorming and initial concept development
+#### Interface Navigation
 
-#### Output Control Headers
-- `@tokens:N` - Constrains response to approximately N tokens
-  - Helps control verbosity for specific use cases
-  - Example: `@tokens:500` for a concise summary
+- **Important**: Context management UI features are primarily accessible in **@files and folders** view, not in @docs view
+- To access full context management:
+  1. Click on the "@files and folders" section in the sidebar
+  2. Locate documents with green dots (active in context)
+  3. Hover over documents to reveal the red X for removal
 
-#### Document Focus Headers
-- `@[doc-name]` - Focuses AI attention on a specific document
-  - Example: `@s4-solopreneur-quickstart.md` focuses on this quickstart guide
-  - How it works:
-    1. Places higher priority on content from the specified document
-    2. Filters out or deprioritizes other documents in context
-    3. Maintains this focus until explicitly changed
+#### Current Best Practices
 
-### Context Persistence Behavior
+1. **Document Management**
+   - Use `@[doc-name]` headers to prioritize specific documents
+   - Remove outdated documents via red X to free up context space
+   - Refresh the view if red X doesn't appear immediately
+   - Remember: you must be in @files and folders view to see these controls
 
-- **Single Prompt Effect**: @ headers apply only to the prompt where they appear by default
-- **Context Switching**: ** not available yet, use new thread..Using a new @ header in a subsequent prompt overrides previous settings
-- **Document Focus Persistence**: Document focus headers (`@[doc-name]`) have special behavior:
-  - They maintain focus on the specified document until:
-    1. A new document focus header is provided
-    2. ** na: An explicit `@reset-context` command is used
-    3. The conversation shifts significantly to a new topic
+2. **Context Optimization**
+   - Monitor green numbers to track token usage
+   - Maintain a focused set of relevant documents
+   - Remove documents that are no longer needed
+   - Combine UI-based removal with @ headers for optimal control
 
-### Advanced Context Management
+3. **Starting New Threads**
+   - Look for the lightning button (⚡) in the top-right corner
+   - Start a new thread when:
+     - You've accumulated too much conversation history
+     - You need a completely fresh context
+     - Current document stack has become unwieldy
+     - You're switching to an entirely new task or topic
 
-#### Context Reset Commands ** not available yet
+4. **Thread Specialization Strategy**
+   - Save and reuse threads for specific recurring workflows
+   - Benefits of specialized threads:
+     - **Reinforcement Persistence**: Threads with established praise history maintain the reinforcement patterns
+     - **Workflow Memory**: Specialized threads (GitOps, B1 debugging, etc.) retain workflow-specific knowledge
+     - **Progressive Improvement**: Each use makes the thread more efficient as the assistant builds on previous successful interactions
+   - Example specialized threads:
+     - Development workflows (SS4-B1 implementation)
+     - Infrastructure management (GitOps, deployments)
+     - Documentation generation
+     - Testing and debugging
+   - Return to these threads when performing the same class of tasks rather than starting fresh each time
 
-- **`@reset-context` - Comprehensive context management command
-  - Clears all document-specific focus settings
-  - Resets prioritization to default behavior
-  - **Maintains** conversation history and general context
-  - Useful when switching between major tasks or topics
-  - Example: `@reset-context Now let's discuss a new feature`
+#### Troubleshooting
 
-- **`@reset-docs` - Document-specific reset command
-  - Removes only document focus settings
-  - Preserves conversation context and other @ settings
-  - Allows for "starting fresh" with document references
-  - Example: `@reset-docs I want to reference new documentation`
+- **Red X Not Appearing**: Switch to @files and folders view, then refresh
+- **Context Not Updating**: Sometimes requires refreshing the document view
+- **Unintended Document Influence**: Use precise @[doc-name] headers or remove via red X
+- **Context Window Full**: Start a new thread or remove unnecessary documents
 
-- **`@drop-last` - Selective context management
-  - Removes only the most recently referenced document
-  - Similar to "Ctrl-D" functionality but more reliable
-  - Maintains all other context and previous document references
-  - Example: `@drop-last The previous document isn't relevant anymore`
+#### Future Context Management
 
-#### Context Stacking Behavior
+The document management features mentioned below are aspirational and not yet generally available. Until these become available, rely on the context window UI and the limited @ headers currently supported:
 
-- **Priority Stacking**: When multiple document references are active
-  - Most recent document reference receives highest priority
-  - Earlier documents remain in context but with lower priority
-  - Example: `@doc-A` then `@doc-B` results in B having higher priority than A
+- Currently supported: `@fast`, `@slow`, `@draft`, `@tokens:N`, `@[doc-name]`
+- Use new threads rather than reset commands
+- Use the red X removal rather than `@drop-last`
+- Manage context manually until automated features become available
 
-- **Context Window Management**: 
-  - Document references consume context window space
-  - Too many active documents may push earlier conversation out of context
-  - Use reset commands to optimize context window usage
-  - ** na yet, use little x to clear context. **Consider using `@reset-context` before starting complex new tasks
+This hybrid approach of using supported @ headers combined with UI-based context management provides the best control over your context window in the current implementation.
 
-### Best Practices for @ Headers
+## Addendum: Git and Cursor Change Management
 
-1. **Clear Intent Signaling**
-   - Begin prompts with the most relevant @ header
-   - Use document focus headers when working with specific documentation
-   - Combine headers when appropriate (e.g., `@fast @tokens:300`)
+### Understanding File Status Indicators
 
-2. **Context Management**
-   - Use `@[doc-name]` headers to maintain focus during complex tasks
-   - Explicitly reset context when switching between major topics
-   - Be aware that multiple document references dilute focus
+When working in Cursor, you'll notice files in the explorer have color-coded indicators:
+- **Yellow with M**: Modified files with changes not yet committed to Git
+- **Green with A**: New files added to Git staging but not yet committed
+- **Red with D**: Files marked for deletion but not yet committed
+- **White with U**: Untracked files not yet in Git
 
-3. **Response Optimization**
-   - Use `@fast` for quick iterations and simple queries
-   - Use `@slow` for complex technical implementations
-   - Use `@tokens:N` to control verbosity for specific outputs
+These visual cues help you track which files have pending changes that need to be committed.
 
-### Example @ Header Usage
+### Change Acceptance Workflow
 
-```yaml
-# Quick response focusing on quickstart guide
-prompt: |
-  @fast @s4-solopreneur-quickstart.md
-  Summarize the key points about state management
+To efficiently manage changes in SS4, especially those recommended by Claude:
 
-# Detailed technical response with token limit
-prompt: |
-  @slow @tokens:1000
-  Explain the technical implementation of JWT authentication
+1. **During Development**:
+   - Accept recommended changes as they appear
+   - Verify changes are appropriate before accepting
+   - Check files with yellow indicators to ensure all changes are reviewed
 
-# Document-focused query for specific documentation
-prompt: |
-  @user-story-template.md
-  Extract the acceptance criteria format
+2. **Batch Acceptance Script**:
+   - Use the provided script to commit all changes at once
+   - Located at `/home/neo/SS4/accept-changes.sh`
+   - Automatically adds all modified files
+   - Prompts for commit message and push option
+
+```bash
+# Run the script from SS4 root
+cd /home/neo/SS4
+./accept-changes.sh
 ```
+
+### Script Features
+
+The acceptance script automates several Git operations:
+- Shows current Git status before making changes
+- Adds all modified tracked files (`git add -u`)
+- Adds specific new files that should be tracked
+- Provides a default commit message
+- Offers option to push changes
+- Works with any current branch
+
+### Best Practices
+
+1. **Regular Commits**:
+   - Commit changes after completing logical units of work
+   - Use descriptive commit messages
+   - Run the acceptance script before ending work sessions
+
+2. **Change Verification**:
+   - Always review yellow files before committing
+   - Ensure all AI recommendations are properly accepted
+   - Check Git status manually if needed with `git status`
+
+3. **Branch Management**:
+   - Create feature branches for major changes
+   - Use the script to commit on your current branch
+   - Consider adding `git pull` before pushing if collaborating
+
+This workflow ensures that all changes, including AI-recommended modifications, are properly tracked and committed to your repository.
+
+### Troubleshooting
+
+If yellow indicators persist after running the script:
+- New changes may have been made after running the script
+- Files may be untracked (use `git add <filename>` to track)
+- Some files might be intentionally excluded from Git (check .gitignore)
+- Run `git status` to see the current state of all files
 
 ## Success Metrics
 
@@ -607,40 +631,3 @@ metrics:
 - Performance monitoring
 - Security audits
 - User feedback 
-
-#### Current Best Practices
-
-1. **Document Management**
-   - Use `@[doc-name]` headers to prioritize specific documents
-   - Remove outdated documents via red X to free up context space
-   - Refresh the view if red X doesn't appear immediately
-   - Remember: you must be in @files and folders view to see these controls
-
-2. **Context Optimization**
-   - Monitor green numbers to track token usage
-   - Maintain a focused set of relevant documents
-   - Remove documents that are no longer needed
-   - Combine UI-based removal with @ headers for optimal control
-
-3. **Starting New Threads**
-   - Look for the lightning button (⚡) in the top-right corner
-   - Start a new thread when:
-     - You've accumulated too much conversation history
-     - You need a completely fresh context
-     - Current document stack has become unwieldy
-     - You're switching to an entirely new task or topic
-
-4. **Thread Specialization Strategy**
-   - Save and reuse threads for specific recurring workflows
-   - Benefits of specialized threads:
-     - **Reinforcement Persistence**: Threads with established praise history maintain the reinforcement patterns
-     - **Workflow Memory**: Specialized threads (GitOps, B1 debugging, etc.) retain workflow-specific knowledge
-     - **Progressive Improvement**: Each use makes the thread more efficient as the assistant builds on previous successful interactions
-   - Example specialized threads:
-     - Development workflows (SS4-B1 implementation)
-     - Infrastructure management (GitOps, deployments)
-     - Documentation generation
-     - Testing and debugging
-   - Return to these threads when performing the same class of tasks rather than starting fresh each time
-
-#### Troubleshooting 

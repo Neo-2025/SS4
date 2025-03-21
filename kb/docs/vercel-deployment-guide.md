@@ -4,9 +4,9 @@
 This guide documents the Vercel deployment setup for SmartStack v4 (SS4), including safeguards against common issues and best practices for deployment management.
 
 ## Project Structure
-- Main project: `smart-scale/p1`
-- Deployment URL: https://p1-smart-scale.vercel.app
-- GitHub repository: https://github.com/Neo-2025/SS4
+- Main project: `smart-scale/p1.1_nbp`
+- Deployment URL: https://p1-1-nbp.vercel.app
+- GitHub repository: https://github.com/Neo-2025/p1.1_nbp
 
 ## Historical Issues and Solutions
 ### Duplicate Project Creation
@@ -30,6 +30,7 @@ Previously, an issue occurred where a duplicate project (`p1-nextjs-saas`) was c
    VERCEL_PROJECT_ID=xxx
    NEXT_PUBLIC_SUPABASE_URL=xxx
    NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+   NEXT_PUBLIC_WEBSITE_URL=xxx
    ```
 
 3. **GitHub Actions Workflow**
@@ -53,8 +54,8 @@ Previously, an issue occurred where a duplicate project (`p1-nextjs-saas`) was c
 ## Branch Management
 Current branches:
 - `main`: Production branch
-- `feat/github-actions`: CI/CD setup
-- `feat/s4-integration`: Framework integration
+- `feat/us-001-github-auth`: GitHub OAuth implementation
+- Additional branches will follow SS4-B1 naming convention (e.g., `feat/us-002-protected-landing`)
 
 ## Troubleshooting
 ### Common Issues

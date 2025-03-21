@@ -1,4 +1,4 @@
-# SmartStack v4 (S4) Specification
+# SmartStack v4 (SS4) Specification
 
 ## Overview
 SmartStack v4 (S4) is a development framework designed for efficient MVP development using AI-assisted development tools, particularly Cursor AI. The framework integrates Branch-First workflow (B1) principles and is specifically tailored to guide solopreneurs through the implementation of the P1.1 story suite.
@@ -30,6 +30,52 @@ SmartStack v4 (S4) is a development framework designed for efficient MVP develop
 - Maintain implementation status in `SAAS_TEMPLATE_STATUS.md`
 - Preserve context across multiple AI assistance threads
 
+### 5. Complexity Management
+- Track story suite metrics
+- Maintain pattern catalog
+- Document architectural decisions
+- Implement optimization strategies
+
+### 6. Pattern Stewardship
+- Identify and document reusable patterns
+- Maintain pattern qualification process
+- Track pattern usage and adaptations
+- Evolve patterns based on implementation feedback
+
+## Architectural Decisions
+
+SS4 has established the following architectural decisions:
+
+### 1. Pattern Stewardship Framework (ADR-0001)
+- Formal pattern documentation in pattern catalog
+- Pattern qualification process (Draft → Candidate → Qualified)
+- Story complexity metrics tracking
+- Pattern usage metrics
+
+### 2. SS4 Optimizations (ADR-0002)
+- Cursor AI UI Design System for consistent styling
+- ESLint + TypeScript for code quality
+- React Query for data fetching
+- Jest + React Testing Library for testing
+
+### 3. Project Structure (ADR-0003)
+- Clean p1.1 implementation with Next.js 14+
+- Specific directory structure for components, lib, etc.
+- Hierarchical environment configuration
+- GitHub + Vercel deployment workflow
+
+### 4. Hybrid Authentication (ADR-0004)
+- Client-side components with loading states
+- Server-side callback handlers
+- Middleware for protected routes
+- Absolute URL handling for cross-environment compatibility
+
+### 5. Dependency Versions and ORM Strategy (ADR-0005)
+- Specific versions for all dependencies
+- Native Supabase query API instead of an ORM
+- Simplified stack with focused functionality
+- Future-proof dependency choices
+
 ## Project Prerequisites
 
 ### Development Environment
@@ -37,7 +83,7 @@ SmartStack v4 (S4) is a development framework designed for efficient MVP develop
 - Node.js 18+ LTS
 - Git with GitHub CLI (`gh`)
 - Vercel CLI
-- Cursor Editor with Claude 3.5+ integration
+- Cursor Editor with Claude 3.7+ integration
 
 ### Accounts and Services
 - GitHub account with repository access
@@ -48,18 +94,42 @@ SmartStack v4 (S4) is a development framework designed for efficient MVP develop
 ### Project Structure
 ```
 SS4/
-├── p1/                           # Main project directory
-│   ├── app/                      # Next.js application
-│   ├── components/               # UI components
-│   ├── lib/                      # Utility libraries
-│   └── public/                   # Static assets
-├── kb/                           # Knowledge base
-│   ├── docs/                     # Documentation
-│   │   ├── P1-1-Story-Suite.md   # Story definitions
-│   │   ├── S4-B1-workflow.md     # Workflow documentation
+├── p1.1/                       # Main project directory
+│   ├── app/                    # Next.js application
+│   │   ├── api/                # API routes
+│   │   ├── auth/               # Auth-related pages
+│   │   ├── dashboard/          # Protected dashboard
+│   │   └── game/               # March Madness game UI
+│   ├── components/             # UI components
+│   │   ├── ui/                 # UI primitives
+│   │   ├── auth/               # Auth components
+│   │   └── game/               # Game components
+│   ├── lib/                    # Utility libraries
+│   │   ├── auth/               # Auth utilities
+│   │   ├── supabase/           # Supabase clients
+│   │   └── utils/              # General utilities
+│   ├── providers/              # React context providers
+│   └── public/                 # Static assets
+├── kb/                         # Knowledge base
+│   ├── docs/                   # Documentation
+│   │   ├── P1-1-Story-Suite.md # Story definitions
+│   │   ├── S4-B1-workflow.md   # Workflow documentation
 │   │   └── smartstack-v4-spec.md # This specification
-│   └── patterns/                 # Implementation patterns
-└── SS4-P1.1-new-thread-training  # Thread training guide
+│   └── ADR/                    # Architectural decisions
+│       ├── ADR-0001-pattern-stewardship-framework.md
+│       ├── ADR-0002-ss4-optimizations.md
+│       ├── ADR-0003-project-structure.md
+│       ├── ADR-0004-hybrid-authentication-strategy.md
+│       └── ADR-0005-dependency-versions-orm-strategy.md
+├── ss4/                        # SmartStack v4 infrastructure
+│   ├── patterns/               # Pattern catalog
+│   │   ├── authentication/     # Auth-related patterns
+│   │   ├── ui/                 # UI patterns
+│   │   ├── data/               # Data patterns
+│   │   └── integration/        # Integration patterns
+│   ├── metrics/                # Complexity metrics
+│   └── scripts/                # Utility scripts
+└── SS4-P1.1-new-thread-training # Thread training guide
 ```
 
 ## Solopreneur (S) Responsibilities
@@ -87,6 +157,12 @@ SS4/
 - Verify preview deployments before merging
 - Ensure proper environment configuration
 - Maintain consistent dependency versions
+
+### Pattern Stewardship
+- Identify and document reusable patterns
+- Follow pattern qualification process
+- Track pattern usage and adaptations
+- Promote pattern reuse across stories
 
 ## Minimum Knowledge Requirements
 
@@ -185,23 +261,67 @@ The P1.1 story suite defines a clear implementation path for a SaaS application 
 ## Technical Stack
 
 ### Frontend
-- Next.js 14+ (App Router)
-- TypeScript 5+
-- Tailwind CSS 
+- Next.js 15.2.3 (App Router)
+- TypeScript 5.4.3
+- Tailwind CSS 3.4.1 with Cursor AI Design System
 - shadcn/ui components
-- Supabase Auth Helpers
+- lucide-react 0.363.0 for icons
 
-### Backend
-- Supabase for authentication and database
-- Vercel for deployment and serverless functions
-- tRPC for API structure (where applicable)
-- Perplexity API for content generation (US-008)
+### Authentication and Database
+- Supabase Auth Helpers 0.9.2
+- Supabase JS 2.39.7
+- Native Supabase query API (no ORM)
+
+### Data Fetching and State Management
+- TanStack Query 5.27.2
+- TanStack Query DevTools 5.27.2
+
+### Form Handling and Validation
+- React Hook Form 7.51.1
+- Zod 3.22.4
+- hookform/resolvers 3.3.4
+
+### Testing
+- Jest 29.7.0
+- React Testing Library 14.2.1
+- Testing Library Jest DOM 6.4.2
+- Jest Environment JSDOM 29.7.0
 
 ### Development
-- Cursor AI for assisted development
-- Git/GitHub for version control
-- Vercel for preview deployments
-- WSL for local development environment
+- ESLint 8.57.0
+- ESLint Config Next 15.2.3
+- TypeScript ESLint Plugin 7.2.0
+- TypeScript ESLint Parser 7.2.0
+- ESLint Plugin React 7.34.0
+- ESLint Plugin React Hooks 4.6.0
+- Git for version control
+- Vercel for deployment
+
+## Installation Commands
+
+```bash
+# Create Next.js project with the right configurations
+npx create-next-app@15.2.3 . --typescript --tailwind --eslint --app
+
+# Install authentication dependencies
+npm install @supabase/auth-helpers-nextjs@0.9.2 @supabase/supabase-js@2.39.7
+
+# Install data fetching
+npm install @tanstack/react-query@5.27.2 @tanstack/react-query-devtools@5.27.2
+
+# Install form handling
+npm install react-hook-form@7.51.1 @hookform/resolvers@3.3.4 zod@3.22.4
+
+# Install UI components
+npm install lucide-react@0.363.0
+npx shadcn-ui@0.8.0 init
+
+# Install testing tools
+npm install -D jest@29.7.0 @testing-library/react@14.2.1 @testing-library/jest-dom@6.4.2 jest-environment-jsdom@29.7.0
+
+# Install ESLint plugins
+npm install -D eslint@8.57.0 eslint-config-next@15.2.3 @typescript-eslint/eslint-plugin@7.2.0 @typescript-eslint/parser@7.2.0 eslint-plugin-react@7.34.0 eslint-plugin-react-hooks@4.6.0
+```
 
 ## Success Metrics
 
@@ -223,8 +343,36 @@ The P1.1 story suite defines a clear implementation path for a SaaS application 
 - Minimal context switching between threads
 - Effective preview testing
 
+## Current Status of US-001
+
+The current implementation status for US-001:
+
+1. **Architectural Decisions**:
+   - Pattern Stewardship Framework established
+   - SS4 Optimizations selected
+   - Project Structure defined
+   - Hybrid Authentication Strategy designed
+   - Dependency Versions and ORM Strategy decided
+
+2. **Pattern Infrastructure**:
+   - Pattern catalog structure created
+   - Initial patterns documented:
+     - Hybrid Auth Flow
+     - Cursor Styled Login
+
+3. **Project Setup**:
+   - p1.1 directory created
+   - Documentation files initialized
+   - Environment configuration prepared
+   - Project linked to Vercel p1.1_nbp
+   - GitHub repository connected
+
+Next steps include initializing the Next.js project following our precise version requirements, implementing the authentication components, and deploying for testing.
+
 ## Version History
-- v4.2: Current version with SS4-B1 workflow integration (Mar)
+- v4.4: Dependency Versions and ORM Strategy (Mar)
+- v4.3: Pattern Stewardship and ADR Integration (Mar)
+- v4.2: SS4-B1 workflow integration (Mar)
 - v4.1: P1.1 Story Suite alignment (Mar)
 - v4.0: Initial SmartStack v4 with AI-assisted development (Feb)
 - v3.x: Previous versions before AI-assisted development (Jan)
