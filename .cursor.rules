@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "model": "claude-3-7-sonnet",
+  "thinking": {
+    "enabled": true,
+    "max_tokens": 20000
+  },
+  "assistant": {
+    "commands": {
+      "require_branch_first": "Always ensure a dedicated branch is created before any code changes",
+      "follow_commit_convention": "Enforce conventional commit message format: type(scope): message",
+      "require_preview_testing": "Ensure preview deployments are tested before merge",
+      "document_patterns": "Document successful implementation patterns in ss4/patterns/",
+      "update_status_docs": "Update SAAS_TEMPLATE_STATUS.md with implementation details",
+      "track_metrics": "Calculate and track story complexity metrics"
+    },
+    "personas": {
+      "branch_first_advocate": {
+        "prompt": "You are a mentor guiding the implementation of SS4-B1 workflow with precision. You ensure each step follows the established pattern, with proper branching, testing, and documentation.",
+        "activation_keywords": ["workflow", "branch", "deploy", "preview"]
+      },
+      "pattern_documentarian": {
+        "prompt": "You identify and document successful implementation patterns, creating clear, reusable solutions that can be applied across the project.",
+        "activation_keywords": ["pattern", "document", "template", "reuse"]
+      },
+      "codebase_architect": {
+        "prompt": "You understand the technical stack and ensure implementations follow best practices for Next.js, TypeScript, and the SaaS architecture.",
+        "activation_keywords": ["architecture", "stack", "implementation", "best practice"]
+      },
+      "pattern_steward": {
+        "prompt": "You maintain the Pattern Catalog, ensuring patterns are properly qualified, documented, and evolved based on implementation feedback.",
+        "activation_keywords": ["pattern", "catalog", "steward", "evolution"]
+      },
+      "metrics_analyst": {
+        "prompt": "You track and analyze story complexity metrics, providing insights on technical debt and refactoring opportunities.",
+        "activation_keywords": ["metrics", "complexity", "measurement", "analysis"]
+      }
+    }
+  },
+  "tools": {
+    "required_tools": ["codebase_search", "list_dir", "read_file", "edit_file", "run_terminal_cmd"],
+    "terminal": {
+      "use_user_terminal": true,
+      "auto_approve_commands": [
+        "git checkout -b",
+        "git status",
+        "git diff",
+        "git log",
+        "ls",
+        "cat",
+        "vercel ls"
+      ]
+    }
+  },
+  "workflow": {
+    "ss4_b1": {
+      "steps": [
+        "create_branch",
+        "identify_applicable_patterns",
+        "implement_changes",
+        "document_new_patterns",
+        "commit_changes",
+        "push_and_create_pr",
+        "deploy_and_test",
+        "document_implementation",
+        "update_pattern_metrics",
+        "merge_when_approved"
+      ],
+      "enforce": true
+    },
+    "story_implementation": {
+      "current_story": {
+        "id": "US-001",
+        "title": "GitHub OAuth Authentication with Shadcn/UI",
+        "description": "Implement GitHub OAuth authentication with visual feedback",
+        "status": "in_progress"
+      }
+    },
+    "pattern_tracking": {
+      "catalog_path": "ss4/patterns/",
+      "track_usage": true,
+      "qualification_process": true
+    }
+  },
+  "knowledge_base": {
+    "paths": [
+      "kb/docs/3.3retrain/P1-1-Story-Suite.md",
+      "kb/docs/3.3retrain/SS4-P1.1-new-thread-training",
+      "kb/docs/3.3retrain/new-th-ss4-b1.md",
+      "kb/docs/3.3retrain/SAAS_TEMPLATE_STATUS.md",
+      "kb/docs/3.3retrain/smartstack-v4-spec.md",
+      "kb/docs/CURSOR_AI_OPTIMIZATION.md",
+      "kb/docs/SMARTSTACK_TOOLS.md",
+      "kb/ADR/ADR-0001-pattern-stewardship-framework.md",
+      "kb/ADR/ADR-0002-ss4-optimizations.md",
+      "kb/ADR/ADR-0003-project-structure.md",
+      "kb/ADR/ADR-0004-hybrid-authentication.md",
+      "ss4/patterns/authentication/hybrid-auth-flow.md",
+      "ss4/patterns/ui/cursor-styled-login.md"
+    ],
+    "dynamic_focus": true
+  },
+  "metrics": {
+    "track_complexity": true,
+    "story_metrics": {
+      "stories_per_actor": {
+        "target_range": [1.5, 2.5],
+        "warning_threshold": 2.5
+      },
+      "acceptance_criteria_avg": {
+        "target_range": [4.0, 6.0],
+        "warning_threshold": 6.0
+      }
+    }
+  }
+} 

@@ -207,6 +207,130 @@ prompt: |
 - Security checks
 - Accessibility compliance
 
+### 4. Validation
+- Regular testing
+- Performance monitoring
+- Security audits
+- User feedback 
+
+## Addendum: Prompt Engineering Headers
+
+### @ Headers for Context and Response Control
+
+The S4 framework utilizes specialized @ headers at the beginning of prompts to control AI assistant behavior, response characteristics, and context management.
+
+#### Model Selection Headers
+- `@claude-3.5-sonnet` - Instructs the system to use Claude 3.5 Sonnet model
+- `@claude-3.7-sonnet` - Instructs the system to use Claude 3.7 Sonnet model
+- `@gpt-4o` - Instructs the system to use GPT-4o model
+
+#### Response Style Headers
+- `@fast` - Prioritizes speed over depth in responses
+  - Produces quicker but possibly less nuanced responses
+  - Best for simple queries where speed matters more than thoroughness
+  - May result in shorter responses with less detailed reasoning
+- `@slow` - Instructs AI to take more time for thorough, detailed responses
+  - Results in more comprehensive analysis and explanations
+  - Best for complex technical or conceptual questions
+- `@draft` - Requests a "first draft" quality response
+  - Prioritizes getting ideas down quickly over polish
+  - Useful for brainstorming and initial concept development
+
+#### Output Control Headers
+- `@tokens:N` - Constrains response to approximately N tokens
+  - Helps control verbosity for specific use cases
+  - Example: `@tokens:500` for a concise summary
+
+#### Document Focus Headers
+- `@[doc-name]` - Focuses AI attention on a specific document
+  - Example: `@s4-solopreneur-quickstart.md` focuses on this quickstart guide
+  - How it works:
+    1. Places higher priority on content from the specified document
+    2. Filters out or deprioritizes other documents in context
+    3. Maintains this focus until explicitly changed
+
+### Context Persistence Behavior
+
+- **Single Prompt Effect**: @ headers apply only to the prompt where they appear by default
+- **Context Switching**: ** not available yet, use new thread..Using a new @ header in a subsequent prompt overrides previous settings
+- **Document Focus Persistence**: Document focus headers (`@[doc-name]`) have special behavior:
+  - They maintain focus on the specified document until:
+    1. A new document focus header is provided
+    2. ** na: An explicit `@reset-context` command is used
+    3. The conversation shifts significantly to a new topic
+
+### Advanced Context Management
+
+#### Context Reset Commands ** not available yet
+
+- **`@reset-context` - Comprehensive context management command
+  - Clears all document-specific focus settings
+  - Resets prioritization to default behavior
+  - **Maintains** conversation history and general context
+  - Useful when switching between major tasks or topics
+  - Example: `@reset-context Now let's discuss a new feature`
+
+- **`@reset-docs` - Document-specific reset command
+  - Removes only document focus settings
+  - Preserves conversation context and other @ settings
+  - Allows for "starting fresh" with document references
+  - Example: `@reset-docs I want to reference new documentation`
+
+- **`@drop-last` - Selective context management
+  - Removes only the most recently referenced document
+  - Similar to "Ctrl-D" functionality but more reliable
+  - Maintains all other context and previous document references
+  - Example: `@drop-last The previous document isn't relevant anymore`
+
+#### Context Stacking Behavior
+
+- **Priority Stacking**: When multiple document references are active
+  - Most recent document reference receives highest priority
+  - Earlier documents remain in context but with lower priority
+  - Example: `@doc-A` then `@doc-B` results in B having higher priority than A
+
+- **Context Window Management**: 
+  - Document references consume context window space
+  - Too many active documents may push earlier conversation out of context
+  - Use reset commands to optimize context window usage
+  - ** na yet, use little x to clear context. **Consider using `@reset-context` before starting complex new tasks
+
+### Best Practices for @ Headers
+
+1. **Clear Intent Signaling**
+   - Begin prompts with the most relevant @ header
+   - Use document focus headers when working with specific documentation
+   - Combine headers when appropriate (e.g., `@fast @tokens:300`)
+
+2. **Context Management**
+   - Use `@[doc-name]` headers to maintain focus during complex tasks
+   - Explicitly reset context when switching between major topics
+   - Be aware that multiple document references dilute focus
+
+3. **Response Optimization**
+   - Use `@fast` for quick iterations and simple queries
+   - Use `@slow` for complex technical implementations
+   - Use `@tokens:N` to control verbosity for specific outputs
+
+### Example @ Header Usage
+
+```yaml
+# Quick response focusing on quickstart guide
+prompt: |
+  @fast @s4-solopreneur-quickstart.md
+  Summarize the key points about state management
+
+# Detailed technical response with token limit
+prompt: |
+  @slow @tokens:1000
+  Explain the technical implementation of JWT authentication
+
+# Document-focused query for specific documentation
+prompt: |
+  @user-story-template.md
+  Extract the acceptance criteria format
+```
+
 ## Success Metrics
 
 ### 1. Development
@@ -483,3 +607,40 @@ metrics:
 - Performance monitoring
 - Security audits
 - User feedback 
+
+#### Current Best Practices
+
+1. **Document Management**
+   - Use `@[doc-name]` headers to prioritize specific documents
+   - Remove outdated documents via red X to free up context space
+   - Refresh the view if red X doesn't appear immediately
+   - Remember: you must be in @files and folders view to see these controls
+
+2. **Context Optimization**
+   - Monitor green numbers to track token usage
+   - Maintain a focused set of relevant documents
+   - Remove documents that are no longer needed
+   - Combine UI-based removal with @ headers for optimal control
+
+3. **Starting New Threads**
+   - Look for the lightning button (⚡) in the top-right corner
+   - Start a new thread when:
+     - You've accumulated too much conversation history
+     - You need a completely fresh context
+     - Current document stack has become unwieldy
+     - You're switching to an entirely new task or topic
+
+4. **Thread Specialization Strategy**
+   - Save and reuse threads for specific recurring workflows
+   - Benefits of specialized threads:
+     - **Reinforcement Persistence**: Threads with established praise history maintain the reinforcement patterns
+     - **Workflow Memory**: Specialized threads (GitOps, B1 debugging, etc.) retain workflow-specific knowledge
+     - **Progressive Improvement**: Each use makes the thread more efficient as the assistant builds on previous successful interactions
+   - Example specialized threads:
+     - Development workflows (SS4-B1 implementation)
+     - Infrastructure management (GitOps, deployments)
+     - Documentation generation
+     - Testing and debugging
+   - Return to these threads when performing the same class of tasks rather than starting fresh each time
+
+#### Troubleshooting 
