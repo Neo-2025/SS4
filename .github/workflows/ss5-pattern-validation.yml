@@ -1,0 +1,15 @@
+name: SS5 Pattern Validation
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'ss5/patterns/**/*.md'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate patterns
+        run: |
+          chmod +x ./ss5/scripts/validate-patterns.sh
+          ./ss5/scripts/validate-patterns.sh
