@@ -4,7 +4,10 @@
 # Checks for required sections and proper formatting
 
 echo "Validating SS5 pattern files..."
-PATTERN_DIR="ss5/patterns"
+# Use absolute path based on script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PATTERN_DIR="$REPO_ROOT/ss5/patterns"
 EXIT_CODE=0
 
 # Required pattern sections

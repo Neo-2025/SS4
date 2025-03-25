@@ -9,10 +9,13 @@ const fs = require('fs-extra');
 const path = require('path');
 const glob = require('glob');
 
-// Configuration
-const PATTERNS_DIR = 'ss5/patterns';
-const CHAINS_DIR = 'ss5/chains';
-const OUTPUT_DIR = 'docs/generated';
+// Configuration with absolute paths
+const SCRIPT_DIR = path.dirname(require.main.filename);
+const REPO_ROOT = path.resolve(SCRIPT_DIR, '../../..');
+const PATTERNS_DIR = path.join(REPO_ROOT, 'ss5/patterns');
+const CHAINS_DIR = path.join(REPO_ROOT, 'ss5/chains');
+const OUTPUT_DIR = path.join(REPO_ROOT, 'docs/generated');
+const METRICS_DATA_PATH = path.join(SCRIPT_DIR, 'metrics-data.json');
 
 // Ensure output directory exists
 fs.ensureDirSync(OUTPUT_DIR);
@@ -105,7 +108,7 @@ patternFiles.forEach(file => {
 
 // Write metrics data to file
 fs.writeJsonSync(path.join(OUTPUT_DIR, 'pattern-metrics.json'), metricsData, { spaces: 2 });
-fs.writeJsonSync('ss5/tools/metrics/metrics-data.json', metricsData, { spaces: 2 });
+fs.writeJsonSync(METRICS_DATA_PATH, metricsData, { spaces: 2 });
 
 console.log(`Collected metrics for ${Object.keys(metricsData).length} patterns.`);
 console.log('Pattern metrics collection complete!'); 

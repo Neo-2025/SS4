@@ -3,7 +3,10 @@
 # SS5 Prompt Injection Tool
 # Suggests appropriate prompts based on current git context
 
-DEFAULT_PROMPT_DIR="ss5/tools/prompts"
+# Use absolute paths based on script location
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+DEFAULT_PROMPT_DIR="$REPO_ROOT/ss5/tools/prompts"
 CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
 BRANCH_PREFIX=${CURRENT_BRANCH%%/*}
 

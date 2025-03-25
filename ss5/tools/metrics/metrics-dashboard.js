@@ -8,8 +8,10 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-// Configuration
-const OUTPUT_DIR = 'docs/generated';
+// Configuration with absolute paths
+const SCRIPT_DIR = path.dirname(require.main.filename);
+const REPO_ROOT = path.resolve(SCRIPT_DIR, '../../..');
+const OUTPUT_DIR = path.join(REPO_ROOT, 'docs/generated');
 const INPUT_FILE = path.join(OUTPUT_DIR, 'pattern-metrics.json');
 
 // Ensure input exists
