@@ -1,0 +1,15 @@
+I'm implementing the {{pattern_name}} pattern (Status: {{qualification_level}}) for {{functionality}}.
+
+Please help me:
+1. Implement the core pattern structure following the pattern's documentation
+2. Adapt the pattern to my specific requirements while maintaining its integrity
+3. Ensure I'm following the pattern's interfaces correctly
+4. Implement appropriate error handling and testing
+5. Document any adaptations I'm making to the pattern
+
+Key considerations:
+- The pattern's qualification level ({{qualification_level}}) indicates how strictly I should adhere to it
+- I need to maintain pattern integrity while solving my specific use case
+- I should document any adaptations for pattern stewardship
+
+This implementation is part of user story {{user_story}} and relates to the following other patterns: {{related_patterns}}. 
