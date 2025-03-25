@@ -1,0 +1,55 @@
+name: SS5 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'ss5/**/*'
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Validate pattern files
+        run: |
+          # Script to validate pattern file format compliance
+          ./ss5/scripts/validate-patterns.sh
+
+  documentation:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: Setup documentation tools
+        run: |
+          cd ss5/tools/doc-gen
+          ./setup.sh
+          
+      - name: Generate documentation
+        run: |
+          cd ss5/tools/doc-gen
+          ./generate-docs.js
+          
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ss5-documentation
+          path: docs/generated/
