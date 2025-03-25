@@ -1,0 +1,29 @@
+name: SS5 Documentation Update
+
+on:
+  push:
+    paths:
+      - 'ss5/patterns/**/*.md'
+      - 'ss5/chains/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  generate_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup documentation tools
+        run: |
+          chmod +x ./ss5/tools/doc-gen/setup.sh
+          ./ss5/tools/doc-gen/setup.sh
+          
+      - name: Generate documentation
+        run: |
+          chmod +x ./ss5/tools/doc-gen/generate-docs.js
+          ./ss5/tools/doc-gen/generate-docs.js
+          
+      - name: Create placeholder documentation
+        run: |
+          mkdir -p docs/generated
+          echo "# SS5 Documentation" > docs/generated/index.md 
