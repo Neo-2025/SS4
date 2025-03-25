@@ -1,0 +1,21 @@
+    "ss4_b1": {
+      "steps": [
+        "create_branch",
+        "identify_applicable_patterns",
+        "implement_changes",
+        "document_new_patterns",
+        "commit_changes",
+        "push_and_create_pr",
+        "deploy_and_test",
+        "document_implementation",
+        "update_pattern_metrics",
+        "merge_when_approved"
+      ],
+      "enforce": true
+    },
+    "story_implementation": {
+      "current_story": {
+        "id": "US-001",
+        "title": "GitHub OAuth Authentication with Shadcn/UI",
+        "description": "Implement GitHub OAuth authentication with visual feedback",
+        "status": "in_progress"
