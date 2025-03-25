@@ -48,6 +48,13 @@ jobs:
           cd ss5/tools/doc-gen
           ./generate-docs.js
           
+      - name: Ensure artifacts directory exists
+        run: |
+       mkdir -p docs/generated
+       echo "Documentation placeholder" > docs/generated/index.html
+      
+      
+      
       - name: Upload documentation artifacts
         uses: actions/upload-artifact@v3
         with:
