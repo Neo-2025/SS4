@@ -1,179 +1,113 @@
 #!/bin/bash
 
 # SS5 Prompt Injection Tool
-# Suggests appropriate prompts based on current git context
+# Helps with inserting standardized prompts for different development stages
 
-DEFAULT_PROMPT_DIR="ss5/tools/prompts"
-CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
-BRANCH_PREFIX=${CURRENT_BRANCH%%/*}
+echo "SS5 Prompt Injection Tool"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
+# Define prompt types
+PROMPT_TYPES=("branch-creation" "pattern-selection" "implementation" "verification" "pull-request")
 
 # Help function
-show_help() {
-  echo "SS5 Prompt Injection Tool"
-  echo "========================="
-  echo "Usage: $0 [options] [context]"
+function show_help {
+  echo "Usage: $0 [OPTIONS]"
   echo ""
   echo "Options:"
-  echo "  --help          Show this help message"
-  echo "  --list          List all available prompts"
-  echo "  --context TYPE  Explicitly set context (branch-creation, pattern-selection, implementation, verification, pull-request)"
+  echo "  -t, --type TYPE    Prompt type (${PROMPT_TYPES[*]})"
+  echo "  -p, --pattern ID   Pattern ID to use in prompt"
+  echo "  -o, --output FILE  Output file (default: stdout)"
+  echo "  -h, --help         Show this help message"
   echo ""
-  echo "Examples:"
-  echo "  $0                      Auto-detect context and suggest prompts"
-  echo "  $0 --list               List all available prompts"
-  echo "  $0 --context implementation  Show implementation prompts"
-  echo ""
+  echo "Example:"
+  echo "  $0 --type implementation --pattern AUTH-01"
 }
 
-# List all available prompts
-list_prompts() {
-  echo "Available SS5 Prompts:"
-  echo "======================"
-  
-  for dir in $DEFAULT_PROMPT_DIR/*; do
-    if [ -d "$dir" ]; then
-      context=$(basename "$dir")
-      echo "Context: $context"
-      
-      for file in "$dir"/*.txt; do
-        if [ -f "$file" ]; then
-          filename=$(basename "$file" .txt)
-          echo "  - $filename"
-        fi
-      done
-      
-      echo ""
-    fi
-  done
-}
-
-# Determine context
-determine_context() {
-  # Parse command line arguments first
-  if [ "$EXPLICIT_CONTEXT" != "" ]; then
-    echo "$EXPLICIT_CONTEXT"
-    return
-  fi
-  
-  # Check if we're in a feature branch
-  if [[ "$BRANCH_PREFIX" == "feat" ]]; then
-    echo "implementation"
-  # Check if we're in a bugfix branch
-  elif [[ "$BRANCH_PREFIX" == "fix" ]]; then
-    echo "implementation"
-  # Check if we're in a documentation branch
-  elif [[ "$BRANCH_PREFIX" == "docs" ]]; then
-    echo "pattern-selection"
-  # Check if we're on main/develop
-  elif [[ "$CURRENT_BRANCH" == "main" || "$CURRENT_BRANCH" == "develop" ]]; then
-    echo "branch-creation"
-  else
-    echo "branch-creation"
-  fi
-}
-
-# Get staged files
-get_staged_files() {
-  git diff --cached --name-only
-}
-
-# Suggest prompt based on context
-suggest_prompt() {
-  local context=$1
-  local staged_files=$2
-  
-  case $context in
-    branch-creation)
-      # Default prompt for branch creation
-      prompt_file="$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
-      ;;
-    pattern-selection)
-      # Check if we're working on patterns
-      if echo "$staged_files" | grep -q "ss5/patterns"; then
-        prompt_file="$DEFAULT_PROMPT_DIR/pattern-selection/new-pattern.txt"
-      else
-        prompt_file="$DEFAULT_PROMPT_DIR/pattern-selection/existing-pattern.txt"
-      fi
-      ;;
-    implementation)
-      prompt_file="$DEFAULT_PROMPT_DIR/implementation/pattern-application.txt"
-      ;;
-    verification)
-      prompt_file="$DEFAULT_PROMPT_DIR/verification/pattern-validation.txt"
-      ;;
-    pull-request)
-      prompt_file="$DEFAULT_PROMPT_DIR/pull-request/pattern-pr.txt"
-      ;;
-    *)
-      prompt_file="$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
-      ;;
-  esac
-  
-  # Return the prompt file (or default if specific one doesn't exist)
-  if [ -f "$prompt_file" ]; then
-    echo "$prompt_file"
-  else
-    # Find any file in the context directory
-    for file in "$DEFAULT_PROMPT_DIR/$context"/*.txt; do
-      if [ -f "$file" ]; then
-        echo "$file"
-        return
-      fi
-    done
-    
-    # Absolute fallback
-    echo "$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
-  fi
-}
-
-# Process command line arguments
-EXPLICIT_CONTEXT=""
+# Parse arguments
+TYPE=""
+PATTERN=""
+OUTPUT=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --help)
+    -t|--type)
+      TYPE="$2"
+      shift 2
+      ;;
+    -p|--pattern)
+      PATTERN="$2"
+      shift 2
+      ;;
+    -o|--output)
+      OUTPUT="$2"
+      shift 2
+      ;;
+    -h|--help)
       show_help
       exit 0
       ;;
-    --list)
-      list_prompts
-      exit 0
-      ;;
-    --context)
-      EXPLICIT_CONTEXT="$2"
-      shift
-      shift
-      ;;
     *)
-      # Any other argument becomes the context
-      EXPLICIT_CONTEXT="$1"
-      shift
+      echo "Unknown option: $1"
+      show_help
+      exit 1
       ;;
   esac
 done
 
-# Main function
-main() {
-  local context=$(determine_context)
-  local staged_files=$(get_staged_files)
-  local prompt_file=$(suggest_prompt "$context" "$staged_files")
-  
-  echo "===== SS5 AI Prompt Suggestion ====="
-  echo "Current context: $context"
-  echo "Current branch: $CURRENT_BRANCH"
-  echo
-  echo "Suggested prompt:"
-  if [ -f "$prompt_file" ]; then
-    cat "$prompt_file"
-  else
-    echo "No prompt found for context: $context"
-    echo "Create a prompt file at: $DEFAULT_PROMPT_DIR/$context/*.txt"
-  fi
-  echo
-  echo "You can find more prompts in: $DEFAULT_PROMPT_DIR"
-  echo "For help, run: $0 --help"
-  echo "======================================"
-}
+# Validate arguments
+if [[ -z "$TYPE" ]]; then
+  echo "ERROR: Prompt type is required"
+  show_help
+  exit 1
+fi
 
-# Run main function if not using a command-line option
-main 
+VALID_TYPE=false
+for t in "${PROMPT_TYPES[@]}"; do
+  if [[ "$t" == "$TYPE" ]]; then
+    VALID_TYPE=true
+    break
+  fi
+done
+
+if [[ "$VALID_TYPE" == "false" ]]; then
+  echo "ERROR: Invalid prompt type '$TYPE'"
+  show_help
+  exit 1
+fi
+
+# Get the prompt template
+TEMPLATE_FILE="$SCRIPT_DIR/$TYPE/template.md"
+if [[ ! -f "$TEMPLATE_FILE" ]]; then
+  echo "ERROR: Prompt template not found at $TEMPLATE_FILE"
+  exit 1
+fi
+
+# Load and process template
+TEMPLATE=$(cat "$TEMPLATE_FILE")
+
+# Replace variables in template
+if [[ ! -z "$PATTERN" ]]; then
+  TEMPLATE=${TEMPLATE//\{\{PATTERN_ID\}\}/$PATTERN}
+  
+  # If pattern exists, try to get more info
+  PATTERN_FILE="$REPO_ROOT/ss5/patterns/*/$PATTERN.md"
+  if [[ -f $PATTERN_FILE ]]; then
+    PATTERN_TITLE=$(grep -m 1 "^# " "$PATTERN_FILE" | sed 's/^# //')
+    TEMPLATE=${TEMPLATE//\{\{PATTERN_TITLE\}\}/$PATTERN_TITLE}
+  fi
+fi
+
+# Replace date variables
+DATE=$(date +%Y-%m-%d)
+TEMPLATE=${TEMPLATE//\{\{DATE\}\}/$DATE}
+
+# Output the result
+if [[ -z "$OUTPUT" ]]; then
+  echo "$TEMPLATE"
+else
+  echo "$TEMPLATE" > "$OUTPUT"
+  echo "Prompt saved to $OUTPUT"
+fi
+
+exit 0
