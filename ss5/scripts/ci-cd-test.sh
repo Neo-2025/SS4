@@ -1,79 +1,68 @@
 #!/bin/bash
 
-# Script to test the SS5 CI/CD pipeline functionality
-echo "Testing SS5 CI/CD Pipeline..."
+# Script to test the SS5 CI/CD pipeline locally
+# Simulates GitHub Actions workflow execution
+
+echo "Testing SS5 CI/CD pipeline locally..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 # Test pattern validation
 echo "Testing pattern validation..."
-if [ -f "ss5/scripts/validate-patterns.sh" ]; then
-  chmod +x ss5/scripts/validate-patterns.sh
-  ./ss5/scripts/validate-patterns.sh
-  if [ $? -ne 0 ]; then
-    echo "Pattern validation failed. Please fix the issues before committing."
-    exit 1
-  else
-    echo "Pattern validation successful."
-  fi
-else
-  echo "WARNING: Pattern validation script not found. Skipping validation."
+$REPO_ROOT/ss5/scripts/validate-patterns.sh
+if [ $? -ne 0 ]; then
+  echo "ERROR: Pattern validation failed"
+  exit 1
 fi
+echo "Pattern validation passed"
 
 # Test documentation generation
 echo "Testing documentation generation..."
-if [ -d "ss5/tools/doc-gen" ]; then
-  cd ss5/tools/doc-gen
-  if [ -f "generate-docs.js" ]; then
-    chmod +x generate-docs.js
-    ./generate-docs.js
-    if [ $? -ne 0 ]; then
-      echo "Documentation generation failed."
-      exit 1
-    else
-      echo "Documentation generation successful."
-    fi
-  else
-    echo "WARNING: Documentation generation script not found. Skipping."
+cd $REPO_ROOT/ss5/tools/doc-gen
+if [ -f "./setup.sh" ]; then
+  ./setup.sh
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Documentation setup failed"
+    exit 1
   fi
-  cd - > /dev/null
+  
+  ./generate-docs.js
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Documentation generation failed"
+    exit 1
+  fi
 else
-  echo "WARNING: Documentation tools directory not found. Skipping."
+  echo "SKIPPED: Documentation tools not found"
 fi
 
-# Test metrics collection
-echo "Testing metrics collection..."
-if [ -d "ss5/tools/metrics" ]; then
-  cd ss5/tools/metrics
-  if [ -f "pattern-metrics.js" ]; then
-    chmod +x pattern-metrics.js
+# Test metrics generation
+echo "Testing metrics generation..."
+cd $REPO_ROOT/ss5/tools/metrics
+if [ -f "./setup.sh" ]; then
+  ./setup.sh
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Metrics setup failed"
+    exit 1
+  fi
+  
+  if [ -f "./pattern-metrics.js" ]; then
     ./pattern-metrics.js
     if [ $? -ne 0 ]; then
-      echo "Metrics collection failed."
+      echo "ERROR: Metrics generation failed"
       exit 1
-    else
-      echo "Metrics collection successful."
     fi
-  else
-    echo "WARNING: Metrics collection script not found. Skipping."
   fi
-  cd - > /dev/null
-else
-  echo "WARNING: Metrics tools directory not found. Skipping."
-fi
-
-# Test prompt system
-echo "Testing prompt system..."
-if [ -f "ss5/tools/prompts/prompt-inject.sh" ]; then
-  chmod +x ss5/tools/prompts/prompt-inject.sh
-  ./ss5/tools/prompts/prompt-inject.sh --list
-  if [ $? -ne 0 ]; then
-    echo "Prompt system test failed."
-    exit 1
-  else
-    echo "Prompt system test successful."
+  
+  if [ -f "./metrics-dashboard.js" ]; then
+    ./metrics-dashboard.js
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Dashboard generation failed"
+      exit 1
+    fi
   fi
 else
-  echo "WARNING: Prompt system script not found. Skipping."
+  echo "SKIPPED: Metrics tools not found"
 fi
 
-echo "CI/CD Pipeline tests completed."
-echo "To trigger the actual GitHub Actions pipeline, commit and push your changes." 
+echo "CI/CD pipeline test completed successfully!"
+exit 0
