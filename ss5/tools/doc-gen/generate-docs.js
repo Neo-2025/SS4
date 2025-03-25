@@ -1,1 +1,1 @@
- 
+#!/usr/bin/env node\nconsole.log("Documentation generation running");\n// Create a simple placeholder documentation\nconst fs = require("fs");\nif (!fs.existsSync("docs/generated")) {\n  fs.mkdirSync("docs/generated", { recursive: true });\n}\nfs.writeFileSync("docs/generated/index.html", "<html><body><h1>SS5 Documentation</h1><p>Generated on " + new Date().toISOString() + "</p></body></html>");\nconsole.log("Documentation generated successfully");
