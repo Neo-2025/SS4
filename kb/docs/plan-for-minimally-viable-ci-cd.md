@@ -507,4 +507,65 @@ The lightweight CI/CD system for SS5 is now fully functional and ready for testi
 
 The system uses the GitHub API approach we documented, which elegantly solves the bootstrap problem of needing automation to set up automation. All components have been confirmed to exist in the repository with proper permissions and configuration.
 
-You're now ready to begin testing with the HealthBench User Story Suite. When you start implementing those stories, the CI/CD system will automatically validate any pattern changes, generate updated documentation, and collect metrics to provide insights into pattern usage. 
+You're now ready to begin testing with the HealthBench User Story Suite. When you start implementing those stories, the CI/CD system will automatically validate any pattern changes, generate updated documentation, and collect metrics to provide insights into pattern usage.
+
+### GitHub API Workflow Deployment Pattern Visualization
+
+```mermaid
+flowchart TD
+    Start([Start Deployment]) --> PrepareLocal[Prepare Local Content]
+    PrepareLocal --> FileCheck{File Exists?}
+    
+    FileCheck -->|Check| API1[gh api GET /repos/:owner/:repo/contents/:path]
+    API1 --> Decision{Response?}
+    
+    Decision -->|404 Not Found| CreateNew[Create New File]
+    Decision -->|200 Found| UpdateExisting[Update Existing File]
+    
+    CreateNew --> Encode1[Base64 Encode Content]
+    UpdateExisting --> GetSHA[Extract SHA from Response]
+    GetSHA --> Encode2[Base64 Encode Content]
+    
+    Encode1 --> API2[gh api PUT with content]
+    Encode2 --> API3[gh api PUT with content + SHA]
+    
+    API2 --> Success1[File Created Successfully]
+    API3 --> Success2[File Updated Successfully]
+    
+    Success1 --> End([Deployment Complete])
+    Success2 --> End
+    
+    subgraph "Traditional Git Workflow"
+        TG1[Clone Repository] --> TG2[Create/Edit File Locally]
+        TG2 --> TG3[Commit Changes]
+        TG3 --> TG4[Push to Remote]
+        TG4 --> TG5[Handle Auth/Conflicts]
+    end
+    
+    subgraph "Verification-First Pattern"
+        V1[Check If Resource Exists] --> V2{Found?}
+        V2 -->|Yes| V3[Get Current Version/SHA]
+        V2 -->|No| V4[Create New]
+        V3 --> V5[Update with Version]
+    end
+    
+    class TG1,TG2,TG3,TG4,TG5 gitworkflow
+    class V1,V2,V3,V4,V5 verification
+    class API1,API2,API3 apicall
+    class CreateNew,UpdateExisting primaryaction
+    
+    classDef gitworkflow fill:#f9d6d2,stroke:#d04a35,color:#333
+    classDef verification fill:#d2f5e3,stroke:#2ca05a,color:#333
+    classDef apicall fill:#d2e5f9,stroke:#4a86e8,color:#333
+    classDef primaryaction fill:#e8d4fa,stroke:#9966ff,color:#333
+```
+
+This diagram illustrates:
+
+1. **Main Flow** - The central workflow from content preparation to successful deployment
+2. **Decision Point** - The crucial verification step that checks if the file exists
+3. **Parallel Paths** - Different handling for file creation vs. updates
+4. **SHA Management** - Extraction of SHA for versioning when updating existing files
+5. **Subgraphs** - Comparison with traditional Git workflow and highlight of the verification-first pattern
+
+The pattern elegantly solves the bootstrap problem by providing a single-command approach to file deployment that handles both creation and updates, with built-in conflict prevention through SHA verification. 
