@@ -265,4 +265,4 @@ function authenticate() {
 
 ## Directory Structure
 
-The complete SS5 CI/CD system uses the following directory structure:
+The complete SS5 CI/CD system uses the following directory structure::
