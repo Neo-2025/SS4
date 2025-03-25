@@ -55,8 +55,8 @@ jobs:
       
       
       
-      - name: Upload documentation artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ss5-documentation
-          path: docs/generated/
+#      - name: Upload documentation artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ss5-documentation
+#          path: docs/generated/
