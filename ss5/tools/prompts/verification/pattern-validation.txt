@@ -1,0 +1,16 @@
+I need to validate my implementation of the {{pattern_name}} pattern (Status: {{qualification_level}}).
+
+Please help me:
+1. Verify that my implementation follows the pattern specification
+2. Confirm that I've implemented all required components and interfaces
+3. Check that I've preserved the core elements of the pattern
+4. Identify any potential issues or deviations from the pattern
+5. Suggest improvements to better align with the pattern's intent
+
+My implementation needs to meet the appropriate adherence level based on the pattern's qualification level:
+- Core patterns: Strict adherence with minimal adaptation
+- Adaptive patterns: Follow core structure with appropriate use of adaptation points
+- Validated/Candidate patterns: Follow general structure with reasonable adaptation
+- Draft patterns: Follow conceptual approach with flexible implementation
+
+This validation is for user story {{user_story}} and I need to document any pattern adaptations in the pull request. 
