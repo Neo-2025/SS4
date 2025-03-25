@@ -1,0 +1,13 @@
+name: SS5 Minimal Test
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test Environment
+        run: |
+          echo "Hello from GitHub Actions!"
+          ls -la
+          pwd
