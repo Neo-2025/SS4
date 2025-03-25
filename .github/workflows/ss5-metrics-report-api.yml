@@ -1,0 +1,24 @@
+name: SS5 Pattern Metrics Report
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ss5/patterns/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  generate_metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup metrics tools
+        run: |
+          chmod +x ./ss5/tools/metrics/setup.sh
+          ./ss5/tools/metrics/setup.sh
+          
+      - name: Create placeholder metrics
+        run: |
+          mkdir -p docs/generated
+          echo '{"metrics": "placeholder"}' > docs/generated/metrics-data.json 
