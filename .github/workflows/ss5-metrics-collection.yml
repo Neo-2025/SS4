@@ -1,0 +1,24 @@
+name: SS5 Metrics Collection
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Create output directory
+        run: mkdir -p docs/generated
+      - name: Generate metrics
+        run: |
+          chmod +x ss5/tools/metrics/pattern-metrics.js
+          node ss5/tools/metrics/pattern-metrics.js
+      - name: Upload metrics artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ss5-metrics
+          path: docs/generated/pattern-metrics.json
