@@ -1,0 +1,26 @@
+name: SS5 Documentation Generation
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ss5/patterns/**/*.md'
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Create output directory
+        run: mkdir -p docs/generated
+      - name: Generate documentation
+        run: |
+          chmod +x ss5/tools/doc-gen/generate-docs.js
+          node ss5/tools/doc-gen/generate-docs.js
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/generated
