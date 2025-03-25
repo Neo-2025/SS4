@@ -1,0 +1,51 @@
+name: SS5 Pattern Metrics Report
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'ss5/patterns/**/*.md'
+      - 'ss5/chains/**/*.md'
+  schedule:
+    # Run monthly on the 1st at 2 AM
+    - cron: '0 2 1 * *'
+  workflow_dispatch:
+    # Allows manual triggering
+
+jobs:
+  generate_metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Get full history for metrics analysis
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: Setup metrics tools
+        run: |
+          cd ss5/tools/metrics
+          ./setup.sh
+          
+      - name: Generate metrics
+        run: |
+          cd ss5/tools/metrics
+          ./pattern-metrics.js
+          ./metrics-dashboard.js
+          
+      - name: Deploy metrics dashboard to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/generated
+          destination_dir: metrics
+          
