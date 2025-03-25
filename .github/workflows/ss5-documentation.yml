@@ -1,0 +1,56 @@
+name: SS5 Documentation Update
+
+on:
+  push:
+    paths:
+      - 'ss5/patterns/**/*.md'
+      - 'ss5/chains/**/*.md'
+      - 'ss5/tools/doc-gen/**/*'
+  schedule:
+    # Run weekly on Monday at 1 AM
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    # Allows manual triggering
+
+jobs:
+  generate_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: Setup documentation tools
+        run: |
+          cd ss5/tools/doc-gen
+          ./setup.sh
+          
+      - name: Generate documentation
+        run: |
+          cd ss5/tools/doc-gen
+          ./generate-docs.js
+          
+      - name: Tag documentation version
+        run: |
+          VERSION=$(date +%Y.%m.%d)
+          echo "Documentation Version: $VERSION" > docs/generated/VERSION.txt
+          
+      - name: Deploy documentation to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/generated
+          
+      - name: Notify on documentation update
+        if: success() && github.ref == 'refs/heads/main'
+        run: |
+          echo "Documentation updated successfully"
+          # Add notification logic (Slack, email, etc.) when configured
