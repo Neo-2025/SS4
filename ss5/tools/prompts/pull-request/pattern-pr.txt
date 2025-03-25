@@ -1,19 +1,10 @@
-I need to create a pull request for my implementation of {{pattern_name}} pattern in user story {{user_story}}.
+I need to create a pull request for my implementation of {{pattern_name}}.
 
 Please help me:
-1. Create a descriptive PR title following conventional commit format (feat/fix/docs/refactor: description)
-2. Document the implemented patterns in the PR description, including:
-   - Pattern names, status levels, and classification
-   - Any adaptations or extensions made to the patterns
-   - Justification for adaptations (if applicable)
-3. Reference related issues or user stories
-4. Include testing instructions
-5. Document any changes to the pattern catalog
+1. Create a descriptive PR title following conventional commit format
+2. Document the implemented patterns in the PR description
+3. Include any pattern adaptations or extensions
+4. Reference related issues or user stories
+5. Include testing instructions
 
-My PR should follow SS5-B1 workflow standards and communicate clearly:
-- What patterns were implemented/adapted
-- How the patterns were applied
-- Any deviations from standard patterns and why
-- What testing has been done
-
-This will help the Pattern Steward conduct an effective review of my implementation. 
+The PR should follow SS5-B1 workflow standards. 

@@ -49,26 +49,20 @@ list_prompts() {
 
 # Determine context
 determine_context() {
-  # Parse command line arguments first
-  if [ "$EXPLICIT_CONTEXT" != "" ]; then
-    echo "$EXPLICIT_CONTEXT"
-    return
-  fi
-  
   # Check if we're in a feature branch
   if [[ "$BRANCH_PREFIX" == "feat" ]]; then
-    echo "implementation"
+    echo "feature"
   # Check if we're in a bugfix branch
   elif [[ "$BRANCH_PREFIX" == "fix" ]]; then
-    echo "implementation"
+    echo "bugfix"
   # Check if we're in a documentation branch
   elif [[ "$BRANCH_PREFIX" == "docs" ]]; then
-    echo "pattern-selection"
+    echo "docs"
   # Check if we're on main/develop
   elif [[ "$CURRENT_BRANCH" == "main" || "$CURRENT_BRANCH" == "develop" ]]; then
-    echo "branch-creation"
+    echo "main"
   else
-    echo "branch-creation"
+    echo "unknown"
   fi
 }
 
@@ -83,47 +77,27 @@ suggest_prompt() {
   local staged_files=$2
   
   case $context in
-    branch-creation)
-      # Default prompt for branch creation
-      prompt_file="$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
-      ;;
-    pattern-selection)
+    feature)
       # Check if we're working on patterns
       if echo "$staged_files" | grep -q "ss5/patterns"; then
-        prompt_file="$DEFAULT_PROMPT_DIR/pattern-selection/new-pattern.txt"
+        echo "pattern-selection/new-pattern.txt"
       else
-        prompt_file="$DEFAULT_PROMPT_DIR/pattern-selection/existing-pattern.txt"
+        echo "implementation/pattern-application.txt"
       fi
       ;;
-    implementation)
-      prompt_file="$DEFAULT_PROMPT_DIR/implementation/pattern-application.txt"
+    bugfix)
+      echo "implementation/pattern-application.txt"
       ;;
-    verification)
-      prompt_file="$DEFAULT_PROMPT_DIR/verification/pattern-validation.txt"
+    docs)
+      echo "pattern-selection/existing-pattern.txt"
       ;;
-    pull-request)
-      prompt_file="$DEFAULT_PROMPT_DIR/pull-request/pattern-pr.txt"
+    main)
+      echo "branch-creation/feature.txt"
       ;;
     *)
-      prompt_file="$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
+      echo "branch-creation/feature.txt"
       ;;
   esac
-  
-  # Return the prompt file (or default if specific one doesn't exist)
-  if [ -f "$prompt_file" ]; then
-    echo "$prompt_file"
-  else
-    # Find any file in the context directory
-    for file in "$DEFAULT_PROMPT_DIR/$context"/*.txt; do
-      if [ -f "$file" ]; then
-        echo "$file"
-        return
-      fi
-    done
-    
-    # Absolute fallback
-    echo "$DEFAULT_PROMPT_DIR/branch-creation/feature.txt"
-  fi
 }
 
 # Process command line arguments
@@ -156,19 +130,14 @@ done
 main() {
   local context=$(determine_context)
   local staged_files=$(get_staged_files)
-  local prompt_file=$(suggest_prompt "$context" "$staged_files")
+  local suggested_prompt=$(suggest_prompt "$context" "$staged_files")
   
   echo "===== SS5 AI Prompt Suggestion ====="
   echo "Current context: $context"
   echo "Current branch: $CURRENT_BRANCH"
   echo
   echo "Suggested prompt:"
-  if [ -f "$prompt_file" ]; then
-    cat "$prompt_file"
-  else
-    echo "No prompt found for context: $context"
-    echo "Create a prompt file at: $DEFAULT_PROMPT_DIR/$context/*.txt"
-  fi
+  cat "$DEFAULT_PROMPT_DIR/$suggested_prompt"
   echo
   echo "You can find more prompts in: $DEFAULT_PROMPT_DIR"
   echo "For help, run: $0 --help"

@@ -1,12 +1,11 @@
-I need to implement {{functionality}} using existing patterns from our SS5 catalog.
+I need to implement {{functionality}} using existing patterns.
 
 Please help me:
-1. Identify relevant patterns from the catalog that match my requirements
-2. Evaluate which patterns best fit my current needs
-3. Determine if I need to adapt any patterns for my specific use case
-4. Create an implementation plan using the selected patterns
-5. Identify any potential pattern chains that would be useful
+1. Identify relevant patterns from the catalog
+2. Evaluate which patterns best match my requirements
+3. Determine if I need to adapt any patterns
+4. Create an implementation plan using selected patterns
 
-Consider pattern qualification levels (Draft, Candidate, Validated, Adaptive, Core) in your recommendations, prioritizing patterns with higher qualification levels.
+Consider pattern qualification levels in your recommendations.
 
 This implementation will be part of user story {{user_story}}. 

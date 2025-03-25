@@ -1,11 +1,10 @@
-I need to create a feature branch for implementing {{feature_name}} following the SS5-B1 workflow.
+Create a feature branch for implementing {{feature_name}} following the SS5-B1 workflow.
 
 Important considerations:
 1. Use the prefix 'feat/' followed by a descriptive name
-2. Reference the user story ID if applicable (US-xxx)
-3. Keep the branch name concise but descriptive
-4. Focus on a single feature or pattern implementation
+2. Keep the branch name concise but descriptive
+3. Include user story ID if applicable
 
-Example: feat/US-001-github-oauth
+Example: feat/auth-github-integration
 
 Please help me create an appropriate branch name and then suggest what patterns from the catalog might be relevant to this feature. 

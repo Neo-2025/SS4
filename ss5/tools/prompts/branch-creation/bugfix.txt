@@ -1,10 +1,9 @@
-I need to create a bugfix branch for addressing {{bug_description}} following the SS5-B1 workflow.
+Create a bugfix branch for addressing {{bug_description}} following the SS5-B1 workflow.
 
 Important considerations:
 1. Use the prefix 'fix/' followed by a descriptive name
-2. Reference the issue number if applicable (#xxx)
+2. Reference the issue number if applicable
 3. Keep the branch name concise but descriptive
-4. Focus on fixing a specific issue
 
 Example: fix/login-error-handling
 

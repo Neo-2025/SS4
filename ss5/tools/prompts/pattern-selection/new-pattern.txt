@@ -1,12 +1,9 @@
-I need to develop a new pattern for {{functionality}} that doesn't exist in our current pattern catalog.
+I need to develop a new pattern for {{functionality}}.
 
 Please help me:
-1. Determine the appropriate pattern classification (UI, Authentication, Data, Integration, Process)
-2. Create an initial Draft pattern document following SS5 specifications
-3. Define the problem and solution clearly
-4. Create a reference implementation example
-5. Identify potential related patterns from our existing catalog
+1. Determine the appropriate pattern classification
+2. Create an initial Draft pattern document
+3. Implement a reference example
+4. Document the problem and solution clearly
 
-The new pattern should follow SS5 documentation standards with proper Status, Classification, Problem, Solution, Benefits, and Related Patterns sections.
-
-This pattern will help implement user story {{user_story}} and should be designed for reusability. 
+The new pattern should follow SS5 documentation standards. 

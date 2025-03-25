@@ -1,11 +1,12 @@
-I need to validate my implementation of the {{pattern_name}} pattern (Status: {{qualification_level}}).
+I need to validate my implementation of the {{pattern_name}} pattern.
 
 Please help me:
-1. Verify that my implementation follows the pattern specification
-2. Confirm that I've implemented all required components and interfaces
-3. Check that I've preserved the core elements of the pattern
-4. Identify any potential issues or deviations from the pattern
-5. Suggest improvements to better align with the pattern's intent
+1. Check if my implementation follows the pattern specification
+2. Verify that I've implemented all required components
+3. Ensure I'm using the correct interfaces
+4. Address any potential issues or deviations
+
+The pattern qualification level is {{qualification_level}}.
 
 My implementation needs to meet the appropriate adherence level based on the pattern's qualification level:
 - Core patterns: Strict adherence with minimal adaptation
