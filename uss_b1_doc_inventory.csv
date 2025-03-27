@@ -1,0 +1,19 @@
+Directory,Filename,DocumentType,Priority,TransformationType,Status,Notes
+ss5-foundation,README.md,Index,Medium,Update,Completed,Added USS-to-B1 references and links
+ss5-foundation,smartstack-v5-spec.md,Core Concept,High,Major Revision,Completed,Incorporated USS-to-B1-Series as central methodology
+ss5-foundation,ss5-b1-workflow-guide.md,Process,High,Major Revision,Pending,Update to reflect USS-to-B1 approach
+ss5-foundation,ss5-implementation-plan.md,Process,High,Major Revision,Pending,Update implementation approach to USS-to-B1-Series
+ss5-foundation,ss5-pattern-application-guidelines.md,Process,Medium,Update,Pending,Add USS-to-B1 pattern chain guidance
+ss5-foundation,ss5-chain-synthesis-guide.md,Process,High,Major Revision,Partially Completed,Updated for USS-to-B1 chain approach
+ss5-foundation,Architectural_Decision_SS5_Pattern_Stewardship.md,Decision,Medium,Update,Pending,Add references to USS-to-B1-Series where relevant
+ss5-foundation,USS-to-B1-transformation-guide.md,Process,High,Create,Completed,New guide created for USS-to-B1 transformation
+ss5-train-new-thread,README.md,Index,Medium,Update,Pending,Add USS-to-B1 approach references
+ss5-train-new-thread,ss5-thread-training,Process,High,Major Revision,Completed,Updated to incorporate USS-to-B1 workflow
+ss5-train-new-thread,ss5-prompt-templates.md,Reference,High,Major Revision,Completed,Added USS-to-B1 specific prompts
+ss5-train-new-thread,HealthBench-US-Suite-v4.md,Example,Medium,Update,Pending,Add B1 branch mapping section
+ss5-train-new-thread,ss5-practical-exercises.md,Training,Medium,Update,Pending,Add USS-to-B1 exercises
+ss5-base-refine-2-foundation,ss5-b1-workflow-guide.md,Process,High,Major Revision,Pending,Update to USS-to-B1 approach
+ss5-base-refine-2-foundation,HealthBench-US-Suite-v4.md,Example,Medium,Update,Pending,Add B1 branch mapping
+ss5-base-refine-2-foundation,ss5-pattern-application-guidelines.md,Process,Medium,Update,Pending,Add USS transformation guidance
+ss5-base-refine-2-foundation,healthbench-us000-prompt-chain.md,Example,Low,No Change,Pending,Already aligns with approach
+ss5-base-refine-2-foundation,healthbench-us001-prompt-chain.md,Example,Low,No Change,Pending,Already aligns with approach 
