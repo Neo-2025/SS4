@@ -766,22 +766,41 @@ Branch 2 has been successfully implemented with all planned components:
 
 ### Testing Approach
 
-Following the SS5 Branch-First approach, testing has been conducted in Vercel preview environments:
+**IMPORTANT NOTE TO NEW THREAD**: We did not preview/test Branch 2. This critical step is still pending and must be completed before merging.
 
-1. **Verification Deployments**
-   - Created multiple preview deployments to test authentication flow
-   - Developed testing tools in `scripts/test-branch-preview.js`
+While we have created the testing tools and documentation, the actual testing in Vercel preview environments has not been performed:
+
+1. **Testing Tools Created But Not Executed**
+   - Created testing tools in `scripts/test-branch-preview.js`
    - Added configuration verification endpoint at `/api/config-test`
+   - Documented testing procedure in `scripts/branch-preview-test-guide.md`
 
-2. **Manual Testing Process**
-   - Documented step-by-step testing procedure in `scripts/branch-preview-test-guide.md`
-   - Verified each authentication command functions correctly
-   - Tested error handling scenarios
+2. **Missing Verification Steps**
+   - The authentication flow with GitHub has not been verified
+   - Environment variable configuration has not been validated
+   - Command functionality has not been confirmed in preview deployment
 
-3. **Environment Validation**
-   - Verified proper environment variable configuration across environments
-   - Confirmed GitHub OAuth credentials are properly loaded
-   - Validated Supabase connection in preview environments
+### Required Testing Steps for New Thread
+
+Before merging Branch 2, the following testing steps must be completed:
+
+1. **Create Final Preview Deployment**
+   - Deploy the latest code to a Vercel preview environment
+   - Use `npx vercel` to create a fresh deployment
+   - Document the preview URL for testing reference
+
+2. **Execute Manual Testing Procedure**
+   - Follow the guide in `scripts/branch-preview-test-guide.md`
+   - Test all authentication commands (login, logout, account)
+   - Verify error handling and edge cases
+   - Document test results with screenshots
+
+3. **Validate Environment Configuration**
+   - Access the `/api/config-test` endpoint in the preview deployment
+   - Confirm GitHub OAuth credentials are properly configured
+   - Verify Supabase connection is working correctly
+
+Only after successful testing should the PR be approved and merged.
 
 ### Final Steps for Branch 2 Completion
 
