@@ -1,0 +1,25 @@
+ccn,measure_id,measure_name,score,national_average,state_average,reporting_period
+123456,M001,Timely Initiation Of Care,85.2,78.6,80.1,2022-Q4
+123456,M002,Improvement in Ambulation,75.8,70.2,72.3,2022-Q4
+123456,M003,Improvement in Bed Transferring,78.3,71.5,73.8,2022-Q4
+123456,M004,Improvement in Bathing,79.1,72.3,74.5,2022-Q4
+123456,M005,Improvement in Pain Interfering with Activity,62.7,56.4,58.2,2022-Q4
+123456,M006,Improvement in Dyspnea,76.5,68.9,71.2,2022-Q4
+789012,M001,Timely Initiation Of Care,82.3,78.6,80.1,2022-Q4
+789012,M002,Improvement in Ambulation,73.1,70.2,72.3,2022-Q4
+789012,M003,Improvement in Bed Transferring,75.9,71.5,73.8,2022-Q4
+789012,M004,Improvement in Bathing,76.2,72.3,74.5,2022-Q4
+789012,M005,Improvement in Pain Interfering with Activity,60.1,56.4,58.2,2022-Q4
+789012,M006,Improvement in Dyspnea,73.4,68.9,71.2,2022-Q4
+345678,M001,Timely Initiation Of Care,84.5,78.6,79.8,2022-Q4
+345678,M002,Improvement in Ambulation,74.3,70.2,71.5,2022-Q4
+345678,M003,Improvement in Bed Transferring,77.1,71.5,72.6,2022-Q4
+345678,M004,Improvement in Bathing,78.5,72.3,73.8,2022-Q4
+345678,M005,Improvement in Pain Interfering with Activity,61.5,56.4,57.8,2022-Q4
+345678,M006,Improvement in Dyspnea,75.2,68.9,70.4,2022-Q4
+567890,M001,Timely Initiation Of Care,83.8,78.6,81.2,2022-Q4
+567890,M002,Improvement in Ambulation,72.9,70.2,73.5,2022-Q4
+567890,M003,Improvement in Bed Transferring,76.7,71.5,74.9,2022-Q4
+567890,M004,Improvement in Bathing,77.8,72.3,75.6,2022-Q4
+567890,M005,Improvement in Pain Interfering with Activity,59.8,56.4,59.1,2022-Q4
+567890,M006,Improvement in Dyspnea,72.9,68.9,72.3,2022-Q4 

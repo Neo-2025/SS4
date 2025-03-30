@@ -1,0 +1,9 @@
+ccn,name,address,city,state,zip,phone,type,ownership,certification_date
+123456,Valley Home Health,123 Main St,Springfield,IL,62701,2175551234,HHA,Non-profit,2010-05-15
+789012,Summit Home Care,456 Oak Ave,Chicago,IL,60601,3125556789,HHA,For-profit,2015-08-22
+345678,Heartland Health Services,789 Elm St,Houston,TX,77001,7135559876,HHA,Non-profit,2012-03-10
+567890,Bay Area Home Health,101 Pine St,Tampa,FL,33602,8135554321,HHA,For-profit,2018-11-05
+234567,Mountain Care Providers,202 Cedar Rd,Denver,CO,80201,3035557890,HHA,Non-profit,2014-07-20
+654321,Sunshine Health Services,303 Palm Ave,Miami,FL,33101,3055552468,HHA,For-profit,2016-04-12
+987654,Lone Star Home Health,404 Mesquite Dr,Dallas,TX,75201,2145551357,HHA,For-profit,2013-09-30
+876543,Prairie Home Care,505 Wheat Ln,Kansas City,MO,64101,8165559753,HHA,Non-profit,2011-06-25 

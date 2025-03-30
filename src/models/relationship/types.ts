@@ -97,4 +97,44 @@ export interface ReportContext {
   reportTitle: string;
   reportDate: string;
   metrics: string[];
+}
+
+/**
+ * Agency group types
+ */
+export type AgencyGroupType = 'Org' | 'Comp' | 'Target';
+
+/**
+ * Agency group relationship model
+ */
+export interface AgencyGroup {
+  id: string;
+  agencyId: string;
+  type: AgencyGroupType;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Client group model
+ */
+export interface ClientGroup {
+  id: string;
+  clientId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  agencies: AgencyGroup[];
+}
+
+/**
+ * Agency with group information
+ */
+export interface GroupedAgency {
+  ccn: string;
+  name: string;
+  groupType: AgencyGroupType;
+  state: string;
+  groupId: string;
 } 

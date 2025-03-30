@@ -1,0 +1,62 @@
+.terminal-progress-tracker {
+  font-family: monospace;
+  background-color: #0d1117;
+  color: #e6edf3;
+  padding: 1rem;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.terminal-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #58a6ff;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 0.5rem;
+}
+
+.terminal-output {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.terminal-line {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Status colors */
+.status-pending {
+  color: #8b949e;
+}
+
+.status-loading {
+  color: #58a6ff;
+  animation: pulse 1.5s infinite;
+}
+
+.status-complete {
+  color: #7ee787;
+}
+
+.status-error {
+  color: #f85149;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+} 
