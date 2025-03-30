@@ -794,7 +794,7 @@ Before Branch 2 can be considered complete, the following **must** be accomplish
 1. **Create Final Preview Deployment**
    - ✅ Deploy the latest code to a Vercel preview environment
    - ✅ Use `npx vercel` to create a fresh deployment
-   - ✅ Preview URL for testing: https://hb-j0d326iun-smart-scale.vercel.app
+   - ✅ Preview URL for testing: https://hb-1rzup1rnn-smart-scale.vercel.app (updated with env var fix)
    - Follow testing procedures at `scripts/branch-preview-test-guide.md`
 
 2. **Execute Manual Testing Procedure**
