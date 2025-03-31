@@ -1,12 +1,15 @@
 -- Database Setup for HealthBench Branch 3.6
 -- Creates tables and RLS policies for agency data persistence
 
+-- Enable UUID extension if not already enabled
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Enable RLS on tables
 ALTER TABLE IF EXISTS agencies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS agency_groups ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS api_cache ENABLE ROW LEVEL SECURITY;
 
--- Drop existing tables if needed
+-- Drop existing tables if needed (in correct order due to foreign keys)
 DROP TABLE IF EXISTS agency_groups;
 DROP TABLE IF EXISTS agencies;
 DROP TABLE IF EXISTS api_cache;
@@ -64,18 +67,27 @@ CREATE INDEX IF NOT EXISTS agency_groups_group_type_idx ON agency_groups(group_t
 CREATE INDEX IF NOT EXISTS api_cache_expires_at_idx ON api_cache(expires_at);
 
 -- Set up RLS policies for agencies
+DROP POLICY IF EXISTS agencies_user_isolation ON agencies;
 CREATE POLICY agencies_user_isolation ON agencies
   FOR ALL USING (auth.uid() = user_id);
 
 -- Set up RLS policies for agency groups
+DROP POLICY IF EXISTS agency_groups_user_isolation ON agency_groups;
 CREATE POLICY agency_groups_user_isolation ON agency_groups
   FOR ALL USING (auth.uid() = user_id);
 
 -- Set up RLS policies for API cache (global access, managed by expiration)
+DROP POLICY IF EXISTS api_cache_global_read ON api_cache;
 CREATE POLICY api_cache_global_read ON api_cache
   FOR SELECT USING (true);
 
 -- Enable RLS on tables
 ALTER TABLE agencies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE agency_groups ENABLE ROW LEVEL SECURITY;
-ALTER TABLE api_cache ENABLE ROW LEVEL SECURITY; 
+ALTER TABLE api_cache ENABLE ROW LEVEL SECURITY;
+
+-- Insert sample agency data for testing
+INSERT INTO agencies (ccn, name, address, city, state, zip, phone, type, ownership, certification_date, is_fallback_data, user_id)
+VALUES 
+('123456', 'Sample Agency 1', '123 Main St', 'Anytown', 'CA', '90210', '555-1234', 'HHA', 'Private', '2023-01-01', false, auth.uid())
+ON CONFLICT (ccn, user_id) DO NOTHING; 

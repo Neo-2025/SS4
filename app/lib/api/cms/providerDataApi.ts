@@ -4,8 +4,8 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { Agency } from '@/app/lib/models/agency';
-import { env } from '@/app/lib/env';
+import { Agency } from '../../../../lib/models/agency';
+import { env } from '../../../../lib/env';
 
 export class CMSProviderDataApi {
   private client: AxiosInstance;

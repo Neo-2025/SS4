@@ -3,7 +3,7 @@
  * Provides automatic retry with exponential backoff
  */
 
-import { env } from '@/app/lib/env';
+import { env } from '../../../../lib/env';
 
 /**
  * Retry Policy implementation

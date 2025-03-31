@@ -3,7 +3,7 @@
  * Provides resilience for API calls with fallback mechanisms
  */
 
-import { env } from '@/app/lib/env';
+import { env } from '../../../../lib/env';
 
 /**
  * Circuit states

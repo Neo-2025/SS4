@@ -4,8 +4,8 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Agency, AgencyGroupType } from '@/app/lib/models/agency';
-import { env } from '@/app/lib/env';
+import { Agency, AgencyGroupType } from '../../../../lib/models/agency';
+import { env } from '../../../../lib/env';
 
 export class SupabaseService {
   private client: SupabaseClient;
