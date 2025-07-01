@@ -1,0 +1,45 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import styles from './Terminal.module.css';
+
+// Import command registry
+import commandRegistry from '../../lib/commands';
+import { CommandResponse } from '../../lib/commands/types';
+import { supabase } from '../../lib/utils/supabase';
+import { commandHistoryService } from '../../lib/db/supabase-service';
+
+interface TerminalWidget {
+  type: 'dropdown' | 'button' | 'text';
+  id: string;
+  label: string;
+  options?: string[];
+  value?: string;
+  action?: () => void;
+}
+
+const Terminal: React.FC = () => {
+  const [input, setInput] = useState<string>('');
+  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [outputLines, setOutputLines] = useState<Array<{type: string, content: string}>>([
+    { type: 'system', content: 'HealthBench CLI v1.0.0' },
+    { type: 'system', content: 'Type "help" to see available commands' },
+  ]);
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<number>(-1);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const [widgets, setWidgets] = useState<TerminalWidget[]>([]);
+  const [activeWidget, setActiveWidget] = useState<string | null>(null);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: ''
+  });
+
+  // ... rest of the current file content ...
+} 

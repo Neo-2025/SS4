@@ -1,0 +1,31 @@
+# Hospital Territorial Analytics Platform - Critical Rules
+# PERFORMANCE GUARANTEE: 4ms territorial operations with GIN indexes
+
+## CRITICAL INDEXES (Performance Foundation)
+- GIN index on hospital_geozip_coverage.geozip_array enables 4ms territorial operations
+- BTREE indexes on all Provider ID fields for hospital identification
+- GIN index on hospital_groups.provider_ids for system analysis
+- Perfect containment hierarchy: HRR > Compass > HSA > Geozip (zero violations)
+
+## HOSPITAL SCHEMA KNOWLEDGE
+- Use Provider ID (6-digit) for hospitals, NOT CCN
+- hospital_geozip_coverage table is the performance hero
+- Array operations MUST use && operator with GIN indexes
+- NEVER use sequential array operations like array_to_string()
+
+## REQUIRED QUERY PATTERNS
+```sql
+-- CORRECT: GIN-optimized territorial overlap
+WHERE hospital1.geozip_array && hospital2.geozip_array
+
+-- CORRECT: Provider ID array membership  
+WHERE provider_id = ANY(hospital_group.provider_ids)
+
+-- WRONG: Sequential scan patterns
+WHERE array_to_string(geozip_array, ',') LIKE '%12345%'
+```
+
+## PERFORMANCE BENCHMARKS
+- Territorial operations: 4ms maximum
+- Hospital system analysis: <30 seconds national scope
+- Always validate with EXPLAIN ANALYZE before deployment

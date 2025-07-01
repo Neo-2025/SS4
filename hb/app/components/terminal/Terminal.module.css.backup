@@ -1,0 +1,263 @@
+.terminal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #2d2d2d;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.title {
+  font-weight: bold;
+  color: #f0f0f0;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #666;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.output {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.inputLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.prompt {
+  color: #5ff719;
+}
+
+.input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #f0f0f0;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+.statusBar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: #2d2d2d;
+  border-top: 1px solid #3d3d3d;
+  font-size: 0.9em;
+}
+
+/* Widget styles */
+.widgets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.widget {
+  display: inline-block;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownButton {
+  background-color: #3d3d3d;
+  color: #f0f0f0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.dropdownButton:hover {
+  background-color: #4d4d4d;
+}
+
+.dropdownContent {
+  position: absolute;
+  background-color: #2d2d2d;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.dropdownItem {
+  color: #f0f0f0;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #3d3d3d;
+}
+
+.widgetButton {
+  background-color: #3d3d3d;
+  color: #f0f0f0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.widgetButton:hover {
+  background-color: #4d4d4d;
+}
+
+/* Suggestion styles */
+.suggestions {
+  position: absolute;
+  background-color: #2d2d2d;
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestion {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.suggestion:hover,
+.suggestion.selected {
+  background-color: #3d3d3d;
+}
+
+/* ANSI color styles */
+.ansi-31 { color: #ff0000; }
+.ansi-32 { color: #00ff00; }
+.ansi-33 { color: #ffff00; }
+.ansi-34 { color: #0000ff; }
+.ansi-0 { color: inherit; }
+
+/* Message type styles */
+.system { color: #888; }
+.command { color: #5ff719; }
+.success { color: #00ff00; }
+.error { color: #ff0000; }
+.data { color: #ffff00; }
+
+/* Login form styles */
+.loginForm {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.formGroup {
+  margin-bottom: 12px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 4px;
+  color: #f0f0f0;
+}
+
+.formInput {
+  width: 100%;
+  padding: 8px;
+  background-color: #2d2d2d;
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+  color: #f0f0f0;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #5ff719;
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.formButton {
+  flex: 1;
+  padding: 8px 16px;
+  background-color: #3d3d3d;
+  color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.formButton:hover {
+  background-color: #4d4d4d;
+}
+
+.formButton[type="submit"] {
+  background-color: #5ff719;
+  color: #1e1e1e;
+}
+
+.formButton[type="submit"]:hover {
+  background-color: #4dff00;
+} 

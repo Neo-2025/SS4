@@ -1,0 +1,25 @@
+🔧 CRITICAL FIX NEEDED: Replace your current Edge Function with this corrected version
+
+The bug: h3.h3Distance() doesn't exist - should be h3.gridDistance()
+
+DEPLOY THIS CODE TO YOUR SWIFT-API EDGE FUNCTION:
+
+// Replace this line:
+const gridSteps = h3.h3Distance(hospital.h3_bearing_point, h3Cell);
+
+// With this line:
+const gridSteps = h3.gridDistance(hospital.h3_bearing_point, h3Cell);
+
+EXPECTED RESULT AFTER FIX:
+- g_percent values will be > 0 for nearby geozips
+- avg_grid_steps will show actual distances (not 0)
+- materiality_filtered_count will be dramatically lower (5-15% of total)
+- You should see realistic GIV territorial influence calculations
+
+TEST COMMAND AFTER DEPLOYMENT:
+SELECT * FROM golden_function_50_percent();
+
+The fix should show:
+- Hospital 100052: ~50-100 material geozips (not 174)
+- Hospital 100075: ~80-150 material geozips (not 349)
+- Realistic g_percent values based on distance decay 

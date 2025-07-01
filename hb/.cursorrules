@@ -1,0 +1,183 @@
+# Hospital Territorial Analytics Platform - Project Rules
+
+## CRITICAL: Without proper indexing, our O(log n) performance model FAILS completely
+
+### Core Mission
+This project builds revolutionary hospital territorial intelligence using proven PostgreSQL array operations with O(log n) performance. New threads must understand the hospital schema adaptation and never deviate from critical indexing requirements.
+
+## 🏥 HOSPITAL SCHEMA ARCHITECTURE (Adapted from Agency Foundation)
+
+### Core Tables & Critical Indexes
+```sql
+-- TABLE 1: hospital_reference (Individual Hospital Master)
+-- REQUIRED INDEXES (thread drift prevention):
+CREATE INDEX idx_hospital_ref_provider_id ON hospital_reference USING btree (provider_id);
+CREATE INDEX idx_hospital_ref_system ON hospital_reference USING btree (system_affiliation);
+CREATE INDEX idx_hospital_ref_state ON hospital_reference USING btree (state);
+CREATE INDEX idx_hospital_ref_active ON hospital_reference USING btree (active_status);
+
+-- TABLE 2: hospital_geozip_coverage (THE PERFORMANCE HERO)
+-- CRITICAL: GIN index is THE MAGIC - enables 4ms territorial operations
+CREATE INDEX idx_hospital_geozip_array_gin ON hospital_geozip_coverage USING gin (geozip_array);
+CREATE INDEX idx_hospital_geozip_provider_btree ON hospital_geozip_coverage USING btree (provider_id);
+
+-- TABLE 3: hospital_groups (Hospital System Intelligence)
+-- REQUIRED for group territorial unions:
+CREATE INDEX idx_hospital_groups_id ON hospital_groups USING btree (group_id);
+CREATE INDEX idx_hospital_groups_provider_ids_gin ON hospital_groups USING gin (provider_ids);
+CREATE INDEX idx_hospital_groups_confidence ON hospital_groups USING btree (confidence_score);
+
+-- TABLE 4: geozip (Territorial Foundation - IDENTICAL to agency version)
+-- PROVEN INDEXES from agency implementation:
+CREATE INDEX idx_geozip_id ON geozip USING btree (geozip_id);
+CREATE INDEX idx_geozip_hrr ON geozip USING btree (hrr);
+CREATE INDEX idx_geozip_hsa ON geozip USING btree (hsa);
+CREATE INDEX idx_geozip_compass_area ON geozip USING btree (compass_area_id);
+CREATE INDEX idx_geozip_compass_direction ON geozip USING btree (compass_direction);
+CREATE INDEX idx_geozip_state ON geozip USING btree (state_code);
+
+-- MATERIALIZED VIEWS: Hospital Group Territories
+-- THE PERFORMANCE HERO for group-vs-group analysis:
+CREATE INDEX idx_mv_hospital_group_territories_gin ON mv_hospital_group_territories USING gin (group_geozip_union);
+CREATE INDEX idx_mv_hospital_group_territories_id ON mv_hospital_group_territories USING btree (group_id);
+```
+
+## 🏗️ PERFECT CONTAINMENT HIERARCHY (Proven Architecture)
+
+### Geographic Hierarchy: HRR > Compass > HSA > Geozip
+```yaml
+perfect_containment_rules:
+  level_1_hrr: "Hospital Referral Region (Dartmouth Atlas)"
+  level_2_compass: "SmartScale directional subdivisions (W,N,C,S,E)"
+  level_3_hsa: "Health Service Area (Dartmouth Atlas local markets)"
+  level_4_geozip: "Population-weighted territorial atoms"
+  
+containment_validation:
+  compass_to_hrr: "Every compass area belongs to exactly ONE HRR"
+  hsa_to_compass: "Every HSA belongs to exactly ONE compass area"
+  geozip_to_hsa: "Every geozip belongs to exactly ONE HSA"
+  violation_tolerance: "ZERO - Perfect containment required"
+```
+
+### Display Names (mv_display_names verification required)
+```sql
+-- Verify display names exist for all geographic levels:
+SELECT geographic_type, COUNT(*) FROM mv_display_names GROUP BY geographic_type;
+-- Expected: HRR (306), COMPASS (1187), HSA (3402)
+```
+
+## ⚡ PERFORMANCE REQUIREMENTS (Non-Negotiable)
+
+### Proven Benchmarks
+- Territorial overlap operations: **4ms maximum** (geozip_array && geozip_array)
+- Hospital system competitive analysis: **Sub-30 seconds** for national scope
+- Flat file generation: **Sub-60 seconds** with compass-level arrays
+- C% calculations: **Sub-10 seconds** for group-vs-group analysis
+
+### Query Pattern Requirements
+```sql
+-- ALWAYS use GIN indexes for array operations:
+WHERE hospital1.geozip_array && hospital2.geozip_array  -- ✅ CORRECT
+WHERE provider_id = ANY(hospital_group.provider_ids)    -- ✅ CORRECT
+
+-- NEVER do sequential array operations:
+WHERE array_to_string(geozip_array, ',') LIKE '%12345%' -- ❌ WRONG
+```
+
+## 🚨 THREAD DRIFT PREVENTION
+
+### Common Mistakes That Break Performance
+1. **Missing GIN indexes** on array fields → Sequential scans → Query timeout
+2. **Using wrong identifier** (CCN instead of Provider ID for hospitals)
+3. **Ignoring containment hierarchy** → Data integrity violations
+4. **Sequential array operations** instead of GIN-optimized patterns
+5. **Forgetting materialized view indexes** → Group analysis performance failure
+
+### Required Validations Before Any Query
+```sql
+-- 1. Verify GIN indexes exist:
+SELECT indexname FROM pg_indexes WHERE indexname LIKE '%_gin' AND tablename LIKE 'hospital%';
+
+-- 2. Verify perfect containment:
+-- (Use containment validation queries from training guide)
+
+-- 3. Test performance with EXPLAIN ANALYZE:
+EXPLAIN ANALYZE SELECT * FROM hospital_geozip_coverage h1 
+JOIN hospital_geozip_coverage h2 ON h1.geozip_array && h2.geozip_array LIMIT 10;
+-- Should show "Bitmap Index Scan using idx_hospital_geozip_array_gin"
+```
+
+## 🎯 HOSPITAL-SPECIFIC BUSINESS LOGIC
+
+### Key Differences from Agency Schema
+- **Identifier**: Provider ID (6-digit) instead of CCN
+- **Territorial Meaning**: Hospital catchment areas (where patients come FROM) vs agency service areas (where services go TO)
+- **System Grouping**: hospital_groups.provider_ids array instead of hha_groups.ccns
+- **Business Context**: M&A analysis for hospital systems vs competitive intelligence for home health
+
+### Hospital System Examples
+```yaml
+major_hospital_systems:
+  hca_healthcare: "185+ hospitals, 20 states, for-profit"
+  kaiser_permanente: "40+ hospitals, 8 states, integrated delivery"
+  ascension: "140+ hospitals, 19 states, non-profit Catholic"
+  commonspirit: "137+ hospitals, 21 states, non-profit Catholic"
+```
+
+## 📊 MATERIALIZED VIEW ARCHITECTURE
+
+### Required MVs for Hospital Intelligence
+1. **mv_hospital_group_territories**: Pre-computed system territorial unions
+2. **mv_individual_hospital_territories**: Individual hospital catchment analysis
+3. **mv_display_names**: Geographic display name authority (inherited from agency implementation)
+
+### MV Refresh Strategy
+```sql
+-- Refresh hospital materialized views:
+REFRESH MATERIALIZED VIEW CONCURRENTLY mv_hospital_group_territories;
+REFRESH MATERIALIZED VIEW CONCURRENTLY mv_individual_hospital_territories;
+```
+
+## 🔍 DEBUGGING PERFORMANCE ISSUES
+
+### When Queries Are Slow
+1. **Check index usage**: `EXPLAIN ANALYZE` should show index scans, not sequential scans
+2. **Verify GIN indexes**: Array operations MUST use GIN indexes
+3. **Check materialized views**: Group operations should use pre-computed unions
+4. **Validate containment**: Broken hierarchy causes expensive joins
+
+### Emergency Index Recreation
+```sql
+-- If indexes are missing/corrupted, recreate immediately:
+DROP INDEX IF EXISTS idx_hospital_geozip_array_gin;
+CREATE INDEX idx_hospital_geozip_array_gin ON hospital_geozip_coverage USING gin (geozip_array);
+```
+
+## 📋 NEW THREAD CHECKLIST
+
+Before starting any hospital territorial analytics work:
+- [ ] Verify all critical indexes exist (use provided SQL)
+- [ ] Confirm perfect containment hierarchy (run validation queries)
+- [ ] Test basic territorial overlap query performance (should be <10ms)
+- [ ] Validate mv_display_names has all geographic types
+- [ ] Understand Provider ID vs CCN difference
+- [ ] Review hospital system territorial union concept
+
+## 🎯 SUCCESS CRITERIA
+
+A thread is successful when it:
+1. Maintains sub-5-second hospital system competitive queries
+2. Generates hospital flat files with proper compass arrays in <60 seconds
+3. Preserves perfect containment hierarchy integrity
+4. Uses only GIN-optimized array operations
+5. Delivers executive-ready hospital territorial intelligence
+
+## ⚠️ CRITICAL WARNINGS
+
+- **NEVER** remove or modify existing indexes without understanding performance impact
+- **ALWAYS** use Provider ID for hospitals (not CCN)
+- **NEVER** break perfect containment hierarchy
+- **ALWAYS** verify query performance with EXPLAIN ANALYZE
+- **NEVER** use sequential array operations when GIN operations are available
+
+Remember: Our competitive advantage is 4ms territorial operations. Without proper indexing, we lose everything that makes this platform revolutionary.
