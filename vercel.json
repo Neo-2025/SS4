@@ -1,7 +1,14 @@
 {
-  "buildCommand": "cd hb && npm run build",
-  "outputDirectory": "hb/.next",
-  "installCommand": "cd hb && npm install",
-  "devCommand": "cd hb && npm run dev",
-  "framework": "nextjs"
+  "builds": [
+    {
+      "src": "hb/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "hb/$1"
+    }
+  ]
 } 
