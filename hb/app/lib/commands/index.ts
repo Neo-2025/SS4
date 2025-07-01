@@ -4,6 +4,7 @@
  */
 
 import registry from './registry';
+import './debug-list-commands';
 export * from './types';
 
 // AUTH COMMANDS
